@@ -1,3 +1,202 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><link rel="manifest" href="manifest.json"><title>Mi Presupuesto</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#f4f7fb;color:#111827;padding-bottom:80px}header{background:#111827;color:#fff;padding:20px 16px;border-radius:0 0 24px 24px}.wrap{max-width:760px;margin:auto}.page{padding:16px}.hidden{display:none!important}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#fff;border-radius:17px;padding:15px;box-shadow:0 4px 18px #0001;margin-bottom:12px}.card h2{font-size:17px;margin:0 0 12px}.label,.muted{font-size:12px;color:#64748b}.money{font-size:22px;font-weight:750}.green{color:#15803d}.red{color:#dc2626}.orange{color:#d97706}.progress{height:9px;background:#e5e7eb;border-radius:99px;overflow:hidden}.bar{height:100%;background:#111827}.row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #eef2f7}button{border:0;border-radius:12px;padding:10px 13px;font-weight:650;background:#111827;color:#fff}button.secondary{background:#e5e7eb;color:#111827}button.danger{background:#fee2e2;color:#991b1b}input{width:100%;padding:12px;border:1px solid #dbe2ea;border-radius:11px;margin:6px 0 10px;font-size:15px}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px}.nav button{background:transparent;color:#64748b;font-size:11px;padding:6px}.nav button.active{color:#111827}.badge{padding:5px 8px;border-radius:99px;font-size:11px;font-weight:700;background:#fef3c7;color:#92400e}.ok{background:#dcfce7;color:#166534}.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.auth .card{width:min(430px,100%)}@media(min-width:700px){.page{padding:24px}.grid{grid-template-columns:repeat(4,1fr)}} </style></head><body>
-<div id="auth" class="auth"><div class="card"><h1>Mi Presupuesto</h1><p class="muted">Control financiero desde cualquier celular.</p><label>Correo</label><input id="email" type="email"><label>Contraseña</label><input id="password" type="password"><button onclick="login()">Iniciar sesión</button> <button class="secondary" onclick="signup()">Crear cuenta</button><p id="authMsg" class="muted"></p></div></div>
-<div id="app" class="hidden"><header><div class="wrap"><h1>Mi Presupuesto</h1><p>Tu presupuesto se sincroniza con tu cuenta.</p></div></header><main class="wrap"><section id="home" class="page"></section><section id="commitments" class="page hidden"></section><section id="savings" class="page hidden"></section><section id="expenses" class="page hidden"></section><section id="settings" class="page hidden"></section></main><nav class="nav"><button onclick="tab('home')" id="n-home">⌂<br>Inicio</button><button onclick="tab('commitments')" id="n-commitments">✓<br>Compromisos</button><button onclick="tab('savings')" id="n-savings">◉<br>Ahorro</button><button onclick="tab('expenses')" id="n-expenses">−<br>Gastos</button><button onclick="tab('settings')" id="n-settings">⚙<br>Ajustes</button></nav></div><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="./manifest.json">
+<title>Mi Presupuesto</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f1f5f9;color:#0f172a}
+header{background:#0f172a;color:white;padding:18px 16px;position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:22px}header small{opacity:.75}
+main{max-width:900px;margin:auto;padding:16px 16px 90px}.hidden{display:none!important}
+.card{background:white;border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 3px 15px #0000000d}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{padding:16px;border-radius:16px;background:#fff}.stat b{display:block;font-size:21px;margin-top:5px}
+label{font-size:13px;font-weight:700;display:block;margin:10px 0 5px}input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px}
+button{border:0;border-radius:10px;padding:12px 15px;font-weight:700;font-size:15px;cursor:pointer}.primary{background:#2563eb;color:white}.dark{background:#0f172a;color:white}.danger{background:#dc2626;color:white}.ok{background:#16a34a;color:white}.muted{background:#e2e8f0;color:#0f172a}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.item{border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin:9px 0}.paid{text-decoration:line-through;opacity:.55}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;padding:8px;z-index:10}nav button{background:transparent;font-size:12px;padding:8px}
+.progress{height:12px;background:#e2e8f0;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:#2563eb}
+.auth{max-width:430px;margin:45px auto}.center{text-align:center}.msg{padding:10px;border-radius:10px;background:#eff6ff;margin:10px 0;font-size:14px}
+@media(max-width:600px){.grid3{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.stat b{font-size:18px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="row"><div><h1>Mi Presupuesto</h1><small id="userLabel">Control financiero personal</small></div><button id="logoutBtn" class="muted hidden">Salir</button></div>
+</header>
+
+<main>
+<section id="authView" class="auth card">
+  <h2 id="authTitle">Iniciar sesión</h2>
+  <div id="authMsg" class="msg hidden"></div>
+  <label>Correo electrónico</label><input id="email" type="email" autocomplete="email" placeholder="tu@email.com">
+  <label>Contraseña</label><input id="password" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
+  <button id="loginBtn" class="primary" style="width:100%;margin-top:14px">Iniciar sesión</button>
+  <button id="signupBtn" class="dark" style="width:100%;margin-top:8px">Crear cuenta</button>
+</section>
+
+<section id="appView" class="hidden">
+  <div class="grid">
+    <div class="stat"><span>Ingresos</span><b id="income">RD$0</b></div>
+    <div class="stat"><span>Compromisos</span><b id="commitTotal">RD$0</b></div>
+    <div class="stat"><span>Ahorro</span><b id="savingTotal">RD$0</b></div>
+    <div class="stat"><span>Gastos personales</span><b id="expenseTotal">RD$0</b></div>
+  </div>
+  <div class="card">
+    <div class="row"><strong>Disponible</strong><strong id="available">RD$0</strong></div>
+    <div class="progress" style="margin-top:12px"><div id="availableBar"></div></div>
+    <p id="dailySpend" style="margin-bottom:0"></p>
+  </div>
+
+  <section id="dashboardTab">
+    <div class="card">
+      <h2>Resumen del mes</h2>
+      <p id="traffic">Semáforo financiero</p>
+      <p style="color:#475569">Fórmula: ingresos − compromisos − ahorro − gastos personales.</p>
+    </div>
+  </section>
+
+  <section id="commitmentsTab" class="hidden">
+    <div class="card">
+      <h2>Compromisos</h2>
+      <div id="commitments"></div>
+      <hr>
+      <label>Nombre</label><input id="cName" placeholder="Ej. Teléfono">
+      <label>Monto</label><input id="cAmount" type="number" min="0" placeholder="0">
+      <button id="addCommit" class="primary" style="margin-top:10px">Agregar compromiso</button>
+    </div>
+  </section>
+
+  <section id="savingsTab" class="hidden">
+    <div class="card">
+      <h2>Ahorro</h2>
+      <label>Meta mensual de ahorro</label><input id="savingGoal" type="number" min="0">
+      <button id="saveGoal" class="primary" style="margin-top:10px">Guardar meta</button>
+      <p id="savingProgress"></p>
+    </div>
+  </section>
+
+  <section id="expensesTab" class="hidden">
+    <div class="card">
+      <h2>Gastos personales</h2>
+      <div id="expenses"></div>
+      <hr>
+      <label>Concepto</label><input id="eName" placeholder="Ej. Transporte">
+      <label>Monto</label><input id="eAmount" type="number" min="0" placeholder="0">
+      <button id="addExpense" class="primary" style="margin-top:10px">Registrar gasto</button>
+    </div>
+  </section>
+
+  <section id="settingsTab" class="hidden">
+    <div class="card">
+      <h2>Configuración</h2>
+      <label>Ingreso mensual</label><input id="incomeInput" type="number" min="0">
+      <button id="saveSettings" class="primary" style="margin-top:10px">Guardar cambios</button>
+    </div>
+  </section>
+</section>
+</main>
+
+<nav id="nav" class="hidden">
+<button data-tab="dashboard">🏠<br>Inicio</button>
+<button data-tab="commitments">📋<br>Compromisos</button>
+<button data-tab="savings">💰<br>Ahorro</button>
+<button data-tab="expenses">🧾<br>Gastos</button>
+<button data-tab="settings">⚙️<br>Ajustes</button>
+</nav>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL="https://coalxlyjswqilgqvcsqq.supabase.co";
+const SUPABASE_KEY="sb_publishable_dOpFLWsqOywPwq4Q2HUwFQ_ZIA5YPCe";
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+const DEFAULT={
+ income:18000,savingGoal:5000,
+ commitments:[
+  {name:"Universidad",amount:4000,paid:false},
+  {name:"Luz",amount:1000,paid:false},
+  {name:"Diezmo",amount:1800,paid:false},
+  {name:"Ofrenda",amount:900,paid:false}
+ ],expenses:[]
+};
+let state=structuredClone(DEFAULT), session=null;
+
+const $=id=>document.getElementById(id);
+const money=n=>"RD$"+Number(n||0).toLocaleString("es-DO",{minimumFractionDigits:2,maximumFractionDigits:2});
+function showMsg(t){$("authMsg").textContent=t;$("authMsg").classList.remove("hidden")}
+function hideMsg(){$("authMsg").classList.add("hidden")}
+function localKey(){return "mi_presupuesto_v4_"+(session?.user?.id||"anon")}
+function saveLocal(){localStorage.setItem(localKey(),JSON.stringify(state))}
+function loadLocal(){try{let x=JSON.parse(localStorage.getItem(localKey()));if(x)state=x}catch{}}
+async function loadCloud(){
+ const {data,error}=await supabase.from("budget_data").select("data").eq("user_id",session.user.id).maybeSingle();
+ if(error){console.error(error);return}
+ if(data?.data){state={...structuredClone(DEFAULT),...data.data}}
+ else await saveCloud();
+ saveLocal();
+}
+async function saveCloud(){
+ const {error}=await supabase.from("budget_data").upsert({user_id:session.user.id,data:state,updated_at:new Date().toISOString()});
+ if(error)console.error("Cloud save:",error);
+ saveLocal();
+}
+function totals(){
+ const c=state.commitments.reduce((a,x)=>a+Number(x.amount||0),0);
+ const e=state.expenses.reduce((a,x)=>a+Number(x.amount||0),0);
+ const s=Number(state.savingGoal||0);
+ return {c,e,s,a:Number(state.income||0)-c-s-e};
+}
+function render(){
+ $("income").textContent=money(state.income);$("commitTotal").textContent=money(totals().c);
+ $("savingTotal").textContent=money(totals().s);$("expenseTotal").textContent=money(totals().e);
+ $("available").textContent=money(totals().a);
+ const pct=Math.max(0,Math.min(100,(totals().a/Math.max(1,Number(state.income)))*100));$("availableBar").style.width=pct+"%";
+ $("incomeInput").value=state.income;$("savingGoal").value=state.savingGoal;
+ const days=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate()-new Date().getDate()+1;
+ $("dailySpend").textContent=`Puedes disponer de aproximadamente ${money(Math.max(0,totals().a)/days)} por día hasta fin de mes.`;
+ $("traffic").textContent=totals().a<0?"🔴 Estás por encima de tu presupuesto.":pct<20?"🟡 Presupuesto ajustado.":"🟢 Vas bien con tu presupuesto.";
+ $("savingProgress").textContent=`Meta mensual: ${money(state.savingGoal)}.`;
+ $("commitments").innerHTML=state.commitments.map((x,i)=>`<div class="item ${x.paid?"paid":""}"><div class="row"><div><b>${escapeHtml(x.name)}</b><br>${money(x.amount)}</div><div><button class="${x.paid?"muted":"ok"}" data-pay="${i}">${x.paid?"Pagado":"Marcar pagado"}</button> <button class="danger" data-delc="${i}">×</button></div></div></div>`).join("")||"<p>No hay compromisos.</p>";
+ $("expenses").innerHTML=state.expenses.map((x,i)=>`<div class="item"><div class="row"><div><b>${escapeHtml(x.name)}</b><br>${money(x.amount)}</div><button class="danger" data-dele="${i}">×</button></div></div>`).join("")||"<p>No hay gastos registrados.</p>";
+ document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=async()=>{state.commitments[+b.dataset.pay].paid=!state.commitments[+b.dataset.pay].paid;render();await saveCloud()});
+ document.querySelectorAll("[data-delc]").forEach(b=>b.onclick=async()=>{state.commitments.splice(+b.dataset.delc,1);render();await saveCloud()});
+ document.querySelectorAll("[data-dele]").forEach(b=>b.onclick=async()=>{state.expenses.splice(+b.dataset.dele,1);render();await saveCloud()});
+}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function tab(name){
+ ["dashboard","commitments","savings","expenses","settings"].forEach(x=>$(`${x}Tab`).classList.toggle("hidden",x!==name));
+}
+async function authRefresh(s){
+ session=s;
+ if(s){hideMsg();loadLocal();await loadCloud();$("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("nav").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");$("userLabel").textContent=s.user.email||"Usuario";render()}
+ else{$("authView").classList.remove("hidden");$("appView").classList.add("hidden");$("nav").classList.add("hidden");$("logoutBtn").classList.add("hidden")}
+}
+$("loginBtn").onclick=async()=>{
+ hideMsg();const email=$("email").value.trim(),password=$("password").value;
+ if(!email||!password)return showMsg("Escribe tu correo y contraseña.");
+ const {data,error}=await supabase.auth.signInWithPassword({email,password});
+ if(error)showMsg("No se pudo iniciar sesión: "+error.message); else await authRefresh(data.session);
+};
+$("signupBtn").onclick=async()=>{
+ hideMsg();const email=$("email").value.trim(),password=$("password").value;
+ if(!email||password.length<6)return showMsg("Usa un correo válido y una contraseña de al menos 6 caracteres.");
+ const {data,error}=await supabase.auth.signUp({email,password});
+ if(error)return showMsg("No se pudo crear la cuenta: "+error.message);
+ if(data.session)await authRefresh(data.session);else showMsg("Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.");
+};
+$("logoutBtn").onclick=async()=>{await supabase.auth.signOut();location.reload()};
+$("addCommit").onclick=async()=>{let n=$("cName").value.trim(),a=Number($("cAmount").value);if(!n||a<=0)return;state.commitments.push({name:n,amount:a,paid:false});$("cName").value="";$("cAmount").value="";render();await saveCloud()};
+$("addExpense").onclick=async()=>{let n=$("eName").value.trim(),a=Number($("eAmount").value);if(!n||a<=0)return;state.expenses.push({name:n,amount:a});$("eName").value="";$("eAmount").value="";render();await saveCloud()};
+$("saveGoal").onclick=async()=>{state.savingGoal=Math.max(0,Number($("savingGoal").value));render();await saveCloud()};
+$("saveSettings").onclick=async()=>{state.income=Math.max(0,Number($("incomeInput").value));render();await saveCloud()};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+supabase.auth.onAuthStateChange((_e,s)=>{setTimeout(()=>authRefresh(s),0)});
+const {data:{session:s0}}=await supabase.auth.getSession();await authRefresh(s0);
+</script>
+</body>
+</html>
