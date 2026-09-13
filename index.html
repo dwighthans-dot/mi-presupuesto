@@ -113,6 +113,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const SUPABASE_URL="https://coalxlyjswqilgqvcsqq.supabase.co";
 const SUPABASE_KEY="sb_publishable_dOpFLWsqOywPwq4Q2HUwFQ_ZIA5YPCe";
+const APP_URL='https://dwighthans-dot.github.io/mi-presupuesto/';
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 
 const DEFAULT={
@@ -185,7 +186,7 @@ $("loginBtn").onclick=async()=>{
 $("signupBtn").onclick=async()=>{
  hideMsg();const email=$("email").value.trim(),password=$("password").value;
  if(!email||password.length<6)return showMsg("Usa un correo válido y una contraseña de al menos 6 caracteres.");
- const {data,error}=await supabase.auth.signUp({email,password});
+ const {data,error}=await supabase.auth.signUp({email,password, options:{emailRedirectTo:APP_URL}});
  if(error)return showMsg("No se pudo crear la cuenta: "+error.message);
  if(data.session)await authRefresh(data.session);else showMsg("Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.");
 };
