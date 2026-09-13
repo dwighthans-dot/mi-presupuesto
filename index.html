@@ -1,203 +1,72 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
-<link rel="manifest" href="./manifest.json">
-<title>Mi Presupuesto</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827"><link rel="manifest" href="./manifest.json"><title>Mi Presupuesto</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f1f5f9;color:#0f172a}
-header{background:#0f172a;color:white;padding:18px 16px;position:sticky;top:0;z-index:5}
-header h1{margin:0;font-size:22px}header small{opacity:.75}
-main{max-width:900px;margin:auto;padding:16px 16px 90px}.hidden{display:none!important}
-.card{background:white;border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 3px 15px #0000000d}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat{padding:16px;border-radius:16px;background:#fff}.stat b{display:block;font-size:21px;margin-top:5px}
-label{font-size:13px;font-weight:700;display:block;margin:10px 0 5px}input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px}
-button{border:0;border-radius:10px;padding:12px 15px;font-weight:700;font-size:15px;cursor:pointer}.primary{background:#2563eb;color:white}.dark{background:#0f172a;color:white}.danger{background:#dc2626;color:white}.ok{background:#16a34a;color:white}.muted{background:#e2e8f0;color:#0f172a}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.item{border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin:9px 0}.paid{text-decoration:line-through;opacity:.55}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;padding:8px;z-index:10}nav button{background:transparent;font-size:12px;padding:8px}
-.progress{height:12px;background:#e2e8f0;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:#2563eb}
-.auth{max-width:430px;margin:45px auto}.center{text-align:center}.msg{padding:10px;border-radius:10px;background:#eff6ff;margin:10px 0;font-size:14px}
-@media(max-width:600px){.grid3{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.stat b{font-size:18px}}
-</style>
-</head>
+:root{--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--primary:#5b5ce2;--primary2:#7c3aed;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--shadow:0 10px 30px rgba(15,23,42,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#eef2ff 0,#f8fafc 30%,var(--bg) 100%);color:var(--text)}
+button,input,select{font:inherit}button{border:0;cursor:pointer}.hidden{display:none!important}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.wrap{max-width:1040px;margin:auto;padding:18px 18px 105px}
+.top{background:linear-gradient(135deg,#111827,#312e81 65%,#5b21b6);color:#fff;padding:20px 18px 26px;border-radius:0 0 28px 28px;box-shadow:0 10px 35px rgba(49,46,129,.25)}.topin{max-width:1040px;margin:auto}.brand{font-size:21px;font-weight:850}.sub{font-size:12px;opacity:.72}.avatar{width:48px;height:48px;border-radius:16px;object-fit:cover;background:#ffffff22;border:1px solid #ffffff33}.avatarBtn{display:flex;align-items:center;gap:10px;background:#ffffff14;color:white;padding:7px 9px;border-radius:16px}
+.hero{margin-top:18px;background:linear-gradient(135deg,#ffffff1c,#ffffff0a);border:1px solid #ffffff22;border-radius:22px;padding:18px}.hero small{opacity:.7}.balance{font-size:32px;font-weight:850;margin:5px 0 4px}.daily{font-size:13px;opacity:.8}.mini{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.pill{background:#fff;color:#111827;padding:9px 12px;border-radius:12px;font-weight:750;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.stat{background:var(--card);padding:15px;border-radius:20px;box-shadow:var(--shadow);border:1px solid #fff}.stat span{color:var(--muted);font-size:12px}.stat b{display:block;font-size:18px;margin-top:5px}.positive{color:var(--green)}.negative{color:var(--red)}
+.card{background:var(--card);border:1px solid #eef0f4;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}h2{font-size:18px;margin:0 0 13px}h3{font-size:15px;margin:0 0 8px}.muted{color:var(--muted)}
+.progress{height:10px;background:#eef2f7;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:20px}.grid2{display:grid;grid-template-columns:1.3fr .7fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.chart{height:190px;display:flex;align-items:end;gap:10px;padding:15px 4px 4px}.barbox{flex:1;height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px}.bar{width:min(38px,75%);border-radius:9px 9px 4px 4px;background:linear-gradient(180deg,#818cf8,#5b5ce2);min-height:5px}.barlabel{font-size:10px;color:var(--muted)}.barvalue{font-size:10px;font-weight:750;color:#4b5563}
+.item{padding:13px;border:1px solid var(--line);border-radius:16px;margin:9px 0}.item strong{font-size:14px}.amount{font-weight:800}.actions{display:flex;gap:7px;flex-wrap:wrap}.btn{padding:10px 13px;border-radius:12px;font-weight:750;font-size:13px}.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white}.dark{background:#111827;color:white}.light{background:#eef2ff;color:#3730a3}.danger{background:#fee2e2;color:#b91c1c}.ok{background:#dcfce7;color:#047857}.outline{background:white;border:1px solid var(--line);color:#374151}
+label{font-size:12px;font-weight:800;display:block;margin:10px 0 6px}input,select{width:100%;padding:12px 13px;border:1px solid #d9dee8;border-radius:13px;background:#fff;outline:none}input:focus,select:focus{border-color:#818cf8;box-shadow:0 0 0 3px #818cf822}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.account{display:flex;align-items:center;gap:12px}.accountIcon{width:42px;height:42px;border-radius:14px;background:#eef2ff;display:grid;place-items:center;font-size:21px}.accountMeta{flex:1}.accountMeta small{display:block;color:var(--muted);margin-top:2px}.totalbox{background:#111827;color:#fff;border-radius:18px;padding:15px}.traffic{padding:13px;border-radius:15px;background:#f8fafc;font-weight:700}
+nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(680px,calc(100% - 24px));background:#111827f5;backdrop-filter:blur(14px);border:1px solid #ffffff1c;border-radius:22px;padding:7px;display:flex;justify-content:space-around;z-index:20;box-shadow:0 15px 35px rgba(15,23,42,.25)}nav button{background:transparent;color:#cbd5e1;padding:7px 8px;border-radius:14px;font-size:11px;min-width:60px}nav button.active{background:#fff;color:#111827;font-weight:800}
+.auth{max-width:440px;margin:55px auto}.auth .logo{width:62px;height:62px;border-radius:20px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:#fff;font-size:28px;margin-bottom:16px}.msg{padding:11px 13px;border-radius:13px;background:#eef2ff;color:#3730a3;font-size:13px;margin:10px 0}.profilePhoto{width:96px;height:96px;border-radius:28px;object-fit:cover;background:#eef2ff}.center{text-align:center}
+@media(max-width:800px){.cards{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.wrap{padding-left:13px;padding-right:13px}.cards{gap:8px}.stat{padding:13px;border-radius:17px}.stat b{font-size:16px}.hero{padding:16px}.balance{font-size:28px}.formgrid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.top{padding-bottom:22px}}
+</style></head>
 <body>
-<header>
-  <div class="row"><div><h1>Mi Presupuesto</h1><small id="userLabel">Control financiero personal</small></div><button id="logoutBtn" class="muted hidden">Salir</button></div>
-</header>
-
-<main>
-<section id="authView" class="auth card">
-  <h2 id="authTitle">Iniciar sesión</h2>
-  <div id="authMsg" class="msg hidden"></div>
-  <label>Correo electrónico</label><input id="email" type="email" autocomplete="email" placeholder="tu@email.com">
-  <label>Contraseña</label><input id="password" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
-  <button id="loginBtn" class="primary" style="width:100%;margin-top:14px">Iniciar sesión</button>
-  <button id="signupBtn" class="dark" style="width:100%;margin-top:8px">Crear cuenta</button>
-</section>
-
+<header class="top"><div class="topin">
+ <div class="row"><div><div class="brand">Mi Presupuesto</div><div class="sub">Tu dinero, más claro. Tus decisiones, mejores.</div></div><button id="profileQuick" class="avatarBtn"><img id="topAvatar" class="avatar" alt="Perfil"><span id="topName">Mi perfil</span></button></div>
+ <div class="hero"><small>Balance disponible</small><div class="balance" id="available">RD$0.00</div><div class="daily" id="dailySpend">Calculando tu límite diario…</div><div class="mini"><span class="pill" id="incomePill">Ingresos RD$0</span><span class="pill" id="savingPill">Ahorro RD$0</span></div></div>
+</div></header>
+<main class="wrap">
+<section id="authView" class="auth card"><div class="logo">$</div><h2 id="authTitle">Iniciar sesión</h2><div id="authMsg" class="msg hidden"></div><label>Correo electrónico</label><input id="email" type="email" autocomplete="email" placeholder="tu@email.com"><label>Contraseña</label><input id="password" type="password" autocomplete="current-password" placeholder="Mínimo 6 caracteres"><button id="loginBtn" class="btn primary" style="width:100%;margin-top:14px">Iniciar sesión</button><button id="signupBtn" class="btn dark" style="width:100%;margin-top:8px">Crear cuenta</button></section>
 <section id="appView" class="hidden">
-  <div class="grid">
-    <div class="stat"><span>Ingresos</span><b id="income">RD$0</b></div>
-    <div class="stat"><span>Compromisos</span><b id="commitTotal">RD$0</b></div>
-    <div class="stat"><span>Ahorro</span><b id="savingTotal">RD$0</b></div>
-    <div class="stat"><span>Gastos personales</span><b id="expenseTotal">RD$0</b></div>
-  </div>
-  <div class="card">
-    <div class="row"><strong>Disponible</strong><strong id="available">RD$0</strong></div>
-    <div class="progress" style="margin-top:12px"><div id="availableBar"></div></div>
-    <p id="dailySpend" style="margin-bottom:0"></p>
-  </div>
-
-  <section id="dashboardTab">
-    <div class="card">
-      <h2>Resumen del mes</h2>
-      <p id="traffic">Semáforo financiero</p>
-      <p style="color:#475569">Fórmula: ingresos − compromisos − ahorro − gastos personales.</p>
-    </div>
-  </section>
-
-  <section id="commitmentsTab" class="hidden">
-    <div class="card">
-      <h2>Compromisos</h2>
-      <div id="commitments"></div>
-      <hr>
-      <label>Nombre</label><input id="cName" placeholder="Ej. Teléfono">
-      <label>Monto</label><input id="cAmount" type="number" min="0" placeholder="0">
-      <button id="addCommit" class="primary" style="margin-top:10px">Agregar compromiso</button>
-    </div>
-  </section>
-
-  <section id="savingsTab" class="hidden">
-    <div class="card">
-      <h2>Ahorro</h2>
-      <label>Meta mensual de ahorro</label><input id="savingGoal" type="number" min="0">
-      <button id="saveGoal" class="primary" style="margin-top:10px">Guardar meta</button>
-      <p id="savingProgress"></p>
-    </div>
-  </section>
-
-  <section id="expensesTab" class="hidden">
-    <div class="card">
-      <h2>Gastos personales</h2>
-      <div id="expenses"></div>
-      <hr>
-      <label>Concepto</label><input id="eName" placeholder="Ej. Transporte">
-      <label>Monto</label><input id="eAmount" type="number" min="0" placeholder="0">
-      <button id="addExpense" class="primary" style="margin-top:10px">Registrar gasto</button>
-    </div>
-  </section>
-
-  <section id="settingsTab" class="hidden">
-    <div class="card">
-      <h2>Configuración</h2>
-      <label>Ingreso mensual</label><input id="incomeInput" type="number" min="0">
-      <button id="saveSettings" class="primary" style="margin-top:10px">Guardar cambios</button>
-    </div>
-  </section>
-</section>
-</main>
-
-<nav id="nav" class="hidden">
-<button data-tab="dashboard">🏠<br>Inicio</button>
-<button data-tab="commitments">📋<br>Compromisos</button>
-<button data-tab="savings">💰<br>Ahorro</button>
-<button data-tab="expenses">🧾<br>Gastos</button>
-<button data-tab="settings">⚙️<br>Ajustes</button>
-</nav>
-
+ <div class="cards"><div class="stat"><span>Ingresos</span><b id="income">RD$0</b></div><div class="stat"><span>Compromisos</span><b id="commitTotal">RD$0</b></div><div class="stat"><span>Ahorro</span><b id="savingTotal">RD$0</b></div><div class="stat"><span>Gastos</span><b id="expenseTotal">RD$0</b></div></div>
+ <section id="dashboardTab"><div class="grid2"><div class="card"><div class="row"><h2>Movimiento mensual</h2><span class="muted" id="monthLabel"></span></div><div id="chart" class="chart"></div></div><div class="card"><h2>Salud financiera</h2><div id="traffic" class="traffic"></div><div style="margin-top:14px"><div class="row"><span class="muted">Uso del ingreso</span><b id="usagePct">0%</b></div><div class="progress" style="margin-top:7px"><div id="usageBar"></div></div></div><p class="muted" style="font-size:12px;margin-top:14px">Ingresos − compromisos − ahorro − gastos = disponible.</p></div></div>
+ <div class="grid2"><div class="card"><div class="row"><h2>Mis cuentas</h2><button class="btn light" data-tab="accounts">+ Agregar</button></div><div id="accountsPreview"></div></div><div class="card"><h2>Meta de ahorro</h2><div class="row"><span class="muted">Meta mensual</span><b id="goalText">RD$0</b></div><div class="progress" style="margin-top:10px"><div id="goalBar"></div></div><p class="muted" id="goalMsg" style="font-size:12px"></p></div></div></section>
+ <section id="commitmentsTab" class="hidden"><div class="card"><h2>Compromisos</h2><div id="commitments"></div><hr><div class="formgrid"><div><label>Nombre</label><input id="cName" placeholder="Ej. Teléfono"></div><div><label>Monto</label><input id="cAmount" type="number" min="0" placeholder="0"></div></div><button id="addCommit" class="btn primary" style="margin-top:10px">Agregar compromiso</button></div></section>
+ <section id="savingsTab" class="hidden"><div class="card"><h2>Ahorro</h2><label>Meta mensual de ahorro</label><input id="savingGoal" type="number" min="0"><button id="saveGoal" class="btn primary" style="margin-top:10px">Guardar meta</button><div style="margin-top:18px" class="totalbox"><div class="muted" style="color:#cbd5e1">Objetivo del mes</div><b id="savingProgress" style="font-size:22px"></b></div></div></section>
+ <section id="expensesTab" class="hidden"><div class="card"><h2>Gastos personales</h2><div id="expenses"></div><hr><div class="formgrid"><div><label>Concepto</label><input id="eName" placeholder="Ej. Transporte"></div><div><label>Monto</label><input id="eAmount" type="number" min="0" placeholder="0"></div></div><button id="addExpense" class="btn primary" style="margin-top:10px">Registrar gasto</button></div></section>
+ <section id="accountsTab" class="hidden"><div class="card"><div class="row"><div><h2>Cuentas y billeteras</h2><div class="muted" style="font-size:12px">Registra saldos manualmente para ver tu patrimonio.</div></div><button id="addAccountBtn" class="btn light">+ Cuenta</button></div><div id="accountsList"></div></div><div id="accountForm" class="card hidden"><h2>Nueva cuenta</h2><div class="formgrid"><div><label>Tipo</label><select id="aType"><option value="bank">🏦 Banco</option><option value="paypal">🅿️ PayPal</option><option value="cash">💵 Efectivo</option><option value="other">💳 Otra</option></select></div><div><label>Nombre</label><input id="aName" placeholder="Ej. Cuenta principal"></div></div><label>Saldo actual</label><input id="aBalance" type="number" step="0.01" placeholder="0.00"><div class="actions" style="margin-top:10px"><button id="saveAccount" class="btn primary">Guardar cuenta</button><button id="cancelAccount" class="btn outline">Cancelar</button></div></div></section>
+ <section id="profileTab" class="hidden"><div class="card"><div class="center"><img id="profileImg" class="profilePhoto" alt="Foto de perfil"><br><label for="photoInput" class="btn light" style="display:inline-block;margin-top:10px;cursor:pointer">📷 Cambiar foto</label><input id="photoInput" type="file" accept="image/*" class="hidden"></div><h2 style="margin-top:20px">Mi perfil</h2><div class="formgrid"><div><label>Nombre</label><input id="pName" placeholder="Tu nombre"></div><div><label>Teléfono</label><input id="pPhone" placeholder="Opcional"></div></div><label>Ciudad</label><input id="pCity" placeholder="Opcional"><label>Nota personal</label><input id="pNote" placeholder="Ej. Meta: organizar mis finanzas"><button id="saveProfile" class="btn primary" style="margin-top:12px">Guardar perfil</button></div><div class="card"><h2>Cuenta</h2><div class="row"><span class="muted">Correo</span><b id="profileEmail"></b></div><button id="logoutBtn" class="btn danger" style="margin-top:14px">Cerrar sesión</button></div></section>
+ <section id="settingsTab" class="hidden"><div class="card"><h2>Configuración</h2><label>Ingreso mensual</label><input id="incomeInput" type="number" min="0"><button id="saveSettings" class="btn primary" style="margin-top:10px">Guardar ingreso</button></div></section>
+</section></main>
+<nav id="nav" class="hidden"><button data-tab="dashboard" class="active">🏠<br>Inicio</button><button data-tab="commitments">📋<br>Compromisos</button><button data-tab="savings">💰<br>Ahorro</button><button data-tab="expenses">🧾<br>Gastos</button><button data-tab="accounts">🏦<br>Cuentas</button><button data-tab="profile">👤<br>Perfil</button></nav>
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-const SUPABASE_URL="https://coalxlyjswqilgqvcsqq.supabase.co";
-const SUPABASE_KEY="sb_publishable_dOpFLWsqOywPwq4Q2HUwFQ_ZIA5YPCe";
-const APP_URL='https://dwighthans-dot.github.io/mi-presupuesto/';
+const SUPABASE_URL="https://coalxlyjswqilgqvcsqq.supabase.co",SUPABASE_KEY="sb_publishable_dOpFLWsqOywPwq4Q2HUwFQ_ZIA5YPCe",APP_URL="https://dwighthans-dot.github.io/mi-presupuesto/";
 const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-
-const DEFAULT={
- income:18000,savingGoal:5000,
- commitments:[
-  {name:"Universidad",amount:4000,paid:false},
-  {name:"Luz",amount:1000,paid:false},
-  {name:"Diezmo",amount:1800,paid:false},
-  {name:"Ofrenda",amount:900,paid:false}
- ],expenses:[]
-};
-let state=structuredClone(DEFAULT), session=null;
-
-const $=id=>document.getElementById(id);
-const money=n=>"RD$"+Number(n||0).toLocaleString("es-DO",{minimumFractionDigits:2,maximumFractionDigits:2});
-function showMsg(t){$("authMsg").textContent=t;$("authMsg").classList.remove("hidden")}
-function hideMsg(){$("authMsg").classList.add("hidden")}
-function localKey(){return "mi_presupuesto_v4_"+(session?.user?.id||"anon")}
-function saveLocal(){localStorage.setItem(localKey(),JSON.stringify(state))}
-function loadLocal(){try{let x=JSON.parse(localStorage.getItem(localKey()));if(x)state=x}catch{}}
-async function loadCloud(){
- const {data,error}=await supabase.from("budget_data").select("data").eq("user_id",session.user.id).maybeSingle();
- if(error){console.error(error);return}
- if(data?.data){state={...structuredClone(DEFAULT),...data.data}}
- else await saveCloud();
- saveLocal();
+const DEFAULT={income:18000,savingGoal:5000,commitments:[{name:"Universidad",amount:4000,paid:false},{name:"Luz",amount:1000,paid:false},{name:"Diezmo",amount:1800,paid:false},{name:"Ofrenda",amount:900,paid:false}],expenses:[],accounts:[],profile:{name:"",phone:"",city:"",note:"",photo:""}};
+let state=structuredClone(DEFAULT),session=null;const $=id=>document.getElementById(id);const money=n=>"RD$"+Number(n||0).toLocaleString("es-DO",{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+function msg(t){$("authMsg").textContent=t;$("authMsg").classList.remove("hidden")}function hideMsg(){$("authMsg").classList.add("hidden")}
+function key(){return "mi_presupuesto_v6_"+(session?.user?.id||"anon")}function localSave(){localStorage.setItem(key(),JSON.stringify(state))}function localLoad(){try{const x=JSON.parse(localStorage.getItem(key()));if(x)state={...structuredClone(DEFAULT),...x,profile:{...DEFAULT.profile,...(x.profile||{})},accounts:Array.isArray(x.accounts)?x.accounts:[]}}catch{}}
+async function cloudLoad(){const {data,error}=await supabase.from("budget_data").select("data").eq("user_id",session.user.id).maybeSingle();if(error){console.error(error);return}if(data?.data)state={...structuredClone(DEFAULT),...data.data,profile:{...DEFAULT.profile,...(data.data.profile||{})},accounts:Array.isArray(data.data.accounts)?data.data.accounts:[]};else await cloudSave();localSave()}
+async function cloudSave(){const {error}=await supabase.from("budget_data").upsert({user_id:session.user.id,data:state,updated_at:new Date().toISOString()});if(error)console.error("Cloud save",error);localSave()}
+function totals(){const c=state.commitments.reduce((a,x)=>a+Number(x.amount||0),0),e=state.expenses.reduce((a,x)=>a+Number(x.amount||0),0),s=Number(state.savingGoal||0),i=Number(state.income||0);return{c,e,s,i,a:i-c-s-e}}
+function accountIcon(t){return t==="paypal"?"🅿️":t==="bank"?"🏦":t==="cash"?"💵":"💳"}
+function render(){const t=totals();$("income").textContent=money(t.i);$("commitTotal").textContent=money(t.c);$("savingTotal").textContent=money(t.s);$("expenseTotal").textContent=money(t.e);$("available").textContent=money(t.a);$("incomePill").textContent="Ingresos "+money(t.i);$("savingPill").textContent="Ahorro "+money(t.s);const days=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate()-new Date().getDate()+1;$("dailySpend").textContent=`Límite orientativo: ${money(Math.max(0,t.a)/days)} por día hasta fin de mes.`;const used=Math.max(0,t.i-t.a),pct=Math.min(100,(used/Math.max(1,t.i))*100);$("usagePct").textContent=Math.round(pct)+"%";$("usageBar").style.width=pct+"%";$("traffic").textContent=t.a<0?"🔴 Presupuesto excedido. Conviene ajustar gastos.":pct>80?"🟡 Vas justo. Vigila los gastos variables.":"🟢 Buen control. Mantén el ritmo.";$("incomeInput").value=t.i;$("savingGoal").value=t.s;$("goalText").textContent=money(t.s);$("goalBar").style.width=(t.s?Math.min(100,(t.s/Math.max(1,t.i))*100):0)+"%";$("goalMsg").textContent=t.s?`Tu meta representa ${Math.round(t.s/Math.max(1,t.i)*100)}% de tus ingresos.`:"Define una meta para comenzar.";$("savingProgress").textContent=money(t.s);
+ const m=new Date().toLocaleDateString("es-DO",{month:"long",year:"numeric"});$("monthLabel").textContent=m.charAt(0).toUpperCase()+m.slice(1);renderChart(t);renderCommitments();renderExpenses();renderAccounts();renderProfile();
 }
-async function saveCloud(){
- const {error}=await supabase.from("budget_data").upsert({user_id:session.user.id,data:state,updated_at:new Date().toISOString()});
- if(error)console.error("Cloud save:",error);
- saveLocal();
-}
-function totals(){
- const c=state.commitments.reduce((a,x)=>a+Number(x.amount||0),0);
- const e=state.expenses.reduce((a,x)=>a+Number(x.amount||0),0);
- const s=Number(state.savingGoal||0);
- return {c,e,s,a:Number(state.income||0)-c-s-e};
-}
-function render(){
- $("income").textContent=money(state.income);$("commitTotal").textContent=money(totals().c);
- $("savingTotal").textContent=money(totals().s);$("expenseTotal").textContent=money(totals().e);
- $("available").textContent=money(totals().a);
- const pct=Math.max(0,Math.min(100,(totals().a/Math.max(1,Number(state.income)))*100));$("availableBar").style.width=pct+"%";
- $("incomeInput").value=state.income;$("savingGoal").value=state.savingGoal;
- const days=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate()-new Date().getDate()+1;
- $("dailySpend").textContent=`Puedes disponer de aproximadamente ${money(Math.max(0,totals().a)/days)} por día hasta fin de mes.`;
- $("traffic").textContent=totals().a<0?"🔴 Estás por encima de tu presupuesto.":pct<20?"🟡 Presupuesto ajustado.":"🟢 Vas bien con tu presupuesto.";
- $("savingProgress").textContent=`Meta mensual: ${money(state.savingGoal)}.`;
- $("commitments").innerHTML=state.commitments.map((x,i)=>`<div class="item ${x.paid?"paid":""}"><div class="row"><div><b>${escapeHtml(x.name)}</b><br>${money(x.amount)}</div><div><button class="${x.paid?"muted":"ok"}" data-pay="${i}">${x.paid?"Pagado":"Marcar pagado"}</button> <button class="danger" data-delc="${i}">×</button></div></div></div>`).join("")||"<p>No hay compromisos.</p>";
- $("expenses").innerHTML=state.expenses.map((x,i)=>`<div class="item"><div class="row"><div><b>${escapeHtml(x.name)}</b><br>${money(x.amount)}</div><button class="danger" data-dele="${i}">×</button></div></div>`).join("")||"<p>No hay gastos registrados.</p>";
- document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=async()=>{state.commitments[+b.dataset.pay].paid=!state.commitments[+b.dataset.pay].paid;render();await saveCloud()});
- document.querySelectorAll("[data-delc]").forEach(b=>b.onclick=async()=>{state.commitments.splice(+b.dataset.delc,1);render();await saveCloud()});
- document.querySelectorAll("[data-dele]").forEach(b=>b.onclick=async()=>{state.expenses.splice(+b.dataset.dele,1);render();await saveCloud()});
-}
-function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function tab(name){
- ["dashboard","commitments","savings","expenses","settings"].forEach(x=>$(`${x}Tab`).classList.toggle("hidden",x!==name));
-}
-async function authRefresh(s){
- session=s;
- if(s){hideMsg();loadLocal();await loadCloud();$("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("nav").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");$("userLabel").textContent=s.user.email||"Usuario";render()}
- else{$("authView").classList.remove("hidden");$("appView").classList.add("hidden");$("nav").classList.add("hidden");$("logoutBtn").classList.add("hidden")}
-}
-$("loginBtn").onclick=async()=>{
- hideMsg();const email=$("email").value.trim(),password=$("password").value;
- if(!email||!password)return showMsg("Escribe tu correo y contraseña.");
- const {data,error}=await supabase.auth.signInWithPassword({email,password});
- if(error)showMsg("No se pudo iniciar sesión: "+error.message); else await authRefresh(data.session);
-};
-$("signupBtn").onclick=async()=>{
- hideMsg();const email=$("email").value.trim(),password=$("password").value;
- if(!email||password.length<6)return showMsg("Usa un correo válido y una contraseña de al menos 6 caracteres.");
- const {data,error}=await supabase.auth.signUp({email,password, options:{emailRedirectTo:APP_URL}});
- if(error)return showMsg("No se pudo crear la cuenta: "+error.message);
- if(data.session)await authRefresh(data.session);else showMsg("Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.");
-};
-$("logoutBtn").onclick=async()=>{await supabase.auth.signOut();location.reload()};
-$("addCommit").onclick=async()=>{let n=$("cName").value.trim(),a=Number($("cAmount").value);if(!n||a<=0)return;state.commitments.push({name:n,amount:a,paid:false});$("cName").value="";$("cAmount").value="";render();await saveCloud()};
-$("addExpense").onclick=async()=>{let n=$("eName").value.trim(),a=Number($("eAmount").value);if(!n||a<=0)return;state.expenses.push({name:n,amount:a});$("eName").value="";$("eAmount").value="";render();await saveCloud()};
-$("saveGoal").onclick=async()=>{state.savingGoal=Math.max(0,Number($("savingGoal").value));render();await saveCloud()};
-$("saveSettings").onclick=async()=>{state.income=Math.max(0,Number($("incomeInput").value));render();await saveCloud()};
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>tab(b.dataset.tab));
-supabase.auth.onAuthStateChange((_e,s)=>{setTimeout(()=>authRefresh(s),0)});
-const {data:{session:s0}}=await supabase.auth.getSession();await authRefresh(s0);
-</script>
-</body>
-</html>
+function renderChart(t){const vals=[t.i,t.c,t.s,t.e,Math.max(0,t.a)],labels=["Ingreso","Comprom.","Ahorro","Gastos","Libre"],max=Math.max(...vals,1);$("chart").innerHTML=vals.map((v,i)=>`<div class="barbox"><div class="barvalue">${money(v).replace("RD$","")}</div><div class="bar" style="height:${Math.max(4,v/max*135)}px"></div><div class="barlabel">${labels[i]}</div></div>`).join("")}
+function renderCommitments(){$("commitments").innerHTML=state.commitments.map((x,i)=>`<div class="item ${x.paid?"paid":""}"><div class="row"><div><strong>${esc(x.name)}</strong><br><span class="amount">${money(x.amount)}</span></div><div class="actions"><button class="btn ${x.paid?"light":"ok"}" data-pay="${i}">${x.paid?"Pagado":"Marcar pagado"}</button><button class="btn danger" data-delc="${i}">Eliminar</button></div></div></div>`).join("")||'<p class="muted">No hay compromisos.</p>';document.querySelectorAll("[data-pay]").forEach(b=>b.onclick=async()=>{state.commitments[+b.dataset.pay].paid=!state.commitments[+b.dataset.pay].paid;render();await cloudSave()});document.querySelectorAll("[data-delc]").forEach(b=>b.onclick=async()=>{state.commitments.splice(+b.dataset.delc,1);render();await cloudSave()})}
+function renderExpenses(){$("expenses").innerHTML=state.expenses.map((x,i)=>`<div class="item"><div class="row"><div><strong>${esc(x.name)}</strong><br><span class="amount">${money(x.amount)}</span></div><button class="btn danger" data-dele="${i}">Eliminar</button></div></div>`).join("")||'<p class="muted">No hay gastos registrados.</p>';document.querySelectorAll("[data-dele]").forEach(b=>b.onclick=async()=>{state.expenses.splice(+b.dataset.dele,1);render();await cloudSave()})}
+function renderAccounts(){const html=state.accounts.map((a,i)=>`<div class="item"><div class="account"><div class="accountIcon">${accountIcon(a.type)}</div><div class="accountMeta"><strong>${esc(a.name)}</strong><small>${a.type==="paypal"?"PayPal":a.type==="bank"?"Cuenta bancaria":a.type==="cash"?"Efectivo":"Otra cuenta"}</small></div><div style="text-align:right"><div class="amount">${money(a.balance)}</div><button class="btn danger" data-dela="${i}" style="margin-top:5px">Eliminar</button></div></div></div>`).join("")||'<p class="muted">Aún no has agregado cuentas.</p>';$("accountsList").innerHTML=html;$("accountsPreview").innerHTML=state.accounts.slice(0,3).map(a=>`<div class="item"><div class="account"><div class="accountIcon">${accountIcon(a.type)}</div><div class="accountMeta"><strong>${esc(a.name)}</strong><small>${money(a.balance)}</small></div></div></div>`).join("")||'<p class="muted">Agrega tu banco o PayPal.</p>';document.querySelectorAll("[data-dela]").forEach(b=>b.onclick=async()=>{state.accounts.splice(+b.dataset.dela,1);render();await cloudSave()})}
+function renderProfile(){const p=state.profile||DEFAULT.profile;const src=p.photo||`data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" rx="40" fill="#eef2ff"/><text x="50%" y="54%" text-anchor="middle" font-size="80">👤</text></svg>')}`;$("topAvatar").src=src;$("profileImg").src=src;$("topName").textContent=p.name||"Mi perfil";$("pName").value=p.name||"";$("pPhone").value=p.phone||"";$("pCity").value=p.city||"";$("pNote").value=p.note||"";$("profileEmail").textContent=session?.user?.email||""}
+function tab(n){["dashboard","commitments","savings","expenses","accounts","profile","settings"].forEach(x=>$(x+"Tab").classList.toggle("hidden",x!==n));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===n));window.scrollTo({top:0,behavior:"smooth"})}
+async function refresh(s){session=s;if(s){hideMsg();localLoad();await cloudLoad();$("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("nav").classList.remove("hidden");render();tab("dashboard")}else{$("authView").classList.remove("hidden");$("appView").classList.add("hidden");$("nav").classList.add("hidden")}}
+$("loginBtn").onclick=async()=>{hideMsg();const email=$("email").value.trim(),password=$("password").value;if(!email||!password)return msg("Escribe tu correo y contraseña.");const {data,error}=await supabase.auth.signInWithPassword({email,password});if(error)msg("No se pudo iniciar sesión: "+error.message);else await refresh(data.session)};
+$("signupBtn").onclick=async()=>{hideMsg();const email=$("email").value.trim(),password=$("password").value;if(!email||password.length<6)return msg("Usa un correo válido y una contraseña de al menos 6 caracteres.");const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:APP_URL}});if(error)return msg("No se pudo crear la cuenta: "+error.message);if(data.session)await refresh(data.session);else msg("Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.")};
+$("logoutBtn").onclick=async()=>{await supabase.auth.signOut();location.reload()};$("addCommit").onclick=async()=>{const n=$("cName").value.trim(),a=Number($("cAmount").value);if(!n||a<=0)return;state.commitments.push({name:n,amount:a,paid:false});$("cName").value="";$("cAmount").value="";render();await cloudSave()};$("addExpense").onclick=async()=>{const n=$("eName").value.trim(),a=Number($("eAmount").value);if(!n||a<=0)return;state.expenses.push({name:n,amount:a});$("eName").value="";$("eAmount").value="";render();await cloudSave()};$("saveGoal").onclick=async()=>{state.savingGoal=Math.max(0,Number($("savingGoal").value));render();await cloudSave()};$("saveSettings").onclick=async()=>{state.income=Math.max(0,Number($("incomeInput").value));render();await cloudSave()};
+document.querySelectorAll("nav button,[data-tab]").forEach(b=>b.onclick=()=>tab(b.dataset.tab));$("profileQuick").onclick=()=>tab("profile");$("addAccountBtn").onclick=()=>$("accountForm").classList.remove("hidden");$("cancelAccount").onclick=()=>$("accountForm").classList.add("hidden");$("saveAccount").onclick=async()=>{const n=$("aName").value.trim(),bal=Number($("aBalance").value);if(!n)return;state.accounts.push({type:$("aType").value,name:n,balance:bal||0});$("aName").value="";$("aBalance").value="";$("accountForm").classList.add("hidden");render();await cloudSave()};
+$("saveProfile").onclick=async()=>{state.profile={...state.profile,name:$("pName").value.trim(),phone:$("pPhone").value.trim(),city:$("pCity").value.trim(),note:$("pNote").value.trim()};render();await cloudSave()};$("photoInput").onchange=e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),max=420,scale=Math.min(1,max/Math.max(im.width,im.height));c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext("2d").drawImage(im,0,0,c.width,c.height);state.profile.photo=c.toDataURL("image/jpeg",.78);render();cloudSave()};im.src=r.result};r.readAsDataURL(f)};
+supabase.auth.onAuthStateChange((_e,s)=>setTimeout(()=>refresh(s),0));const {data:{session:s0}}=await supabase.auth.getSession();await refresh(s0);
+</script></body></html>
