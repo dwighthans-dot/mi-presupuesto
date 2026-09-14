@@ -1,1 +1,9 @@
-{"name":"Mi Presupuesto","short_name":"Presupuesto","start_url":"./","display":"standalone","background_color":"#f5f7fb","theme_color":"#111827","lang":"es","description":"Control financiero personal."}
+{
+  "name":"Mesada",
+  "short_name":"Mesada",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#f4f7f6",
+  "theme_color":"#111827",
+  "icons":[{"src":"./logo.png","sizes":"155x155","type":"image/png","purpose":"any maskable"}]
+}
