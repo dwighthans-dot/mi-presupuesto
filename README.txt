@@ -1,11 +1,15 @@
-V3 — Mi Presupuesto con Supabase
+Mesada V11
 
-1. En Supabase > SQL Editor ejecuta TODO el contenido de supabase.sql.
-2. Publica esta carpeta en un hosting HTTPS.
-3. Abre la página desde el celular.
-4. Crea una cuenta e inicia sesión.
-5. El presupuesto se guarda en la nube por usuario.
+MESADA V11 — CORRECCIÓN DE RECUPERACIÓN DE CONTRASEÑA
 
-Valores iniciales: ingreso RD$18,000; Universidad RD$4,000; Luz RD$1,000; Diezmo RD$1,800; Ofrenda RD$900; ahorro RD$5,000.
+1. Reemplaza en GitHub: index.html, manifest.json, sw.js y logo.png.
+2. En Supabase > Authentication > URL Configuration, mantén como Site URL:
+   https://dwighthans-dot.github.io/mi-presupuesto/
+3. En Redirect URLs agrega/mantén exactamente:
+   https://dwighthans-dot.github.io/mi-presupuesto/
 
-La clave incluida es Publishable Key. Nunca uses una service_role/secret key en el navegador.
+IMPORTANTE: esta versión ya NO usa ?reset=1 para recuperar la contraseña. El enlace vuelve a la dirección principal y Supabase activa el flujo PASSWORD_RECOVERY, mostrando automáticamente el panel Nueva contraseña. Esto evita el error de URL no permitida.
+
+Si el envío falla, la aplicación ahora mostrará el mensaje real de Supabase en pantalla, lo que permitirá identificar si se trata de URL no permitida, límite de correo, proveedor SMTP u otro problema.
+
+No ejecutes SQL nuevamente.
