@@ -3,7 +3,8 @@ import { CARD_CATALOG, detectCard, cardPath } from "../services/cards.js";
 import { accountIcon } from "../core/accounts.js";
 import { money, esc } from "../core/calculations.js";
 
-export function createAccountsUI({state,render,cloudSave}){
+export function createAccountsUI({getState,render,cloudSave}){
+  const stateRef=()=>getState();
   let editingAccountIndex=-1;
 
   function updateCardPreview(){
@@ -29,7 +30,7 @@ export function createAccountsUI({state,render,cloudSave}){
   function openAccountForm(i=-1){
     editingAccountIndex=i;
     if(i>=0){
-      const a=state.accounts[i]||{};
+      const a=stateRef().accounts[i]||{};
       $("accountFormTitle").textContent="Editar cuenta";
       $("aType").value=a.type||"bank";
       $("aName").value=a.name||"";
@@ -49,15 +50,15 @@ export function createAccountsUI({state,render,cloudSave}){
       const card=a.cardId?CARD_CATALOG.find(c=>c.id===a.cardId):detectCard(a.institution,a.name,a.cardType||"auto");
       const visual=card?'<div class="accountVisual"><img src="'+cardPath(card)+'" alt="'+esc(card.label)+'"></div>':'<div class="accountIcon">'+accountIcon(a.type)+'</div>';
       const label=card?card.label:(a.type==="paypal"?"PayPal":a.type==="bank"?"Cuenta bancaria":a.type==="cash"?"Efectivo":"Otra cuenta");
-      return '<div class="item"><div class="account">'+visual+'<div class="accountMeta"><strong>'+esc(a.name)+'</strong><small>'+esc(label)+'</small></div><div style="text-align:right"><div class="amount">'+money(a.balance)+'</div><div class="actions" style="justify-content:flex-end;margin-top:5px"><button class="btn light" data-edita="'+state.accounts.indexOf(a)+'">Editar</button><button class="btn danger" data-dela="'+state.accounts.indexOf(a)+'">Eliminar</button></div></div></div></div>';
+      return '<div class="item"><div class="account">'+visual+'<div class="accountMeta"><strong>'+esc(a.name)+'</strong><small>'+esc(label)+'</small></div><div style="text-align:right"><div class="amount">'+money(a.balance)+'</div><div class="actions" style="justify-content:flex-end;margin-top:5px"><button class="btn light" data-edita="'+stateRef().accounts.indexOf(a)+'">Editar</button><button class="btn danger" data-dela="'+stateRef().accounts.indexOf(a)+'">Eliminar</button></div></div></div></div>';
     };
-    $("accountsList").innerHTML=state.accounts.map(make).join("")||'<p class="muted">Aún no has agregado cuentas.</p>';
-    $("accountsPreview").innerHTML=state.accounts.slice(0,3).map(a=>{
+    $("accountsList").innerHTML=stateRef().accounts.map(make).join("")||'<p class="muted">Aún no has agregado cuentas.</p>';
+    $("accountsPreview").innerHTML=stateRef().accounts.slice(0,3).map(a=>{
       const card=a.cardId?CARD_CATALOG.find(c=>c.id===a.cardId):detectCard(a.institution,a.name,a.cardType||"auto");
       return '<div class="item"><div class="account">'+(card?'<div class="accountVisual"><img src="'+cardPath(card)+'" alt="'+esc(card.label)+'"></div>':'<div class="accountIcon">'+accountIcon(a.type)+'</div>')+'<div class="accountMeta"><strong>'+esc(a.name)+'</strong><small>'+money(a.balance)+'</small></div></div></div>';
     }).join("")||'<p class="muted">Agrega tu banco o PayPal.</p>';
     document.querySelectorAll("[data-edita]").forEach(b=>b.onclick=()=>openAccountForm(+b.dataset.edita));
-    document.querySelectorAll("[data-dela]").forEach(b=>b.onclick=async()=>{state.accounts.splice(+b.dataset.dela,1);render();await cloudSave()});
+    document.querySelectorAll("[data-dela]").forEach(b=>b.onclick=async()=>{stateRef().accounts.splice(+b.dataset.dela,1);render();await cloudSave()});
   }
 
   $("profileQuick").onclick=()=>window.__mesadaTab?.("profile");
@@ -71,9 +72,9 @@ export function createAccountsUI({state,render,cloudSave}){
     const n=$("aName").value.trim(),bal=Number($("aBalance").value),type=$("aType").value,institution=$("aInstitution").value.trim(),cardType=$("aCardType").value,card=detectCard(institution,n,cardType);
     if(!n)return;
     if(editingAccountIndex>=0){
-      const current=state.accounts[editingAccountIndex]||{};
-      state.accounts[editingAccountIndex]={...current,type,name:n,balance:bal||0,institution,cardType,cardId:card?.id||null};
-    }else state.accounts.push({type,name:n,balance:bal||0,institution,cardType,cardId:card?.id||null});
+      const current=stateRef().accounts[editingAccountIndex]||{};
+      stateRef().accounts[editingAccountIndex]={...current,type,name:n,balance:bal||0,institution,cardType,cardId:card?.id||null};
+    }else stateRef().accounts.push({type,name:n,balance:bal||0,institution,cardType,cardId:card?.id||null});
     $("accountForm").classList.add("hidden");
     resetAccountForm();
     render();
