@@ -5,13 +5,13 @@ import { renderDashboard } from "../ui/renderDashboard.js";
 import { renderCommitments, renderExpenses, renderIncomeUI, renderReports } from "../ui/renderBudget.js";
 import { CARD_CATALOG, detectCard, cardPath } from "../services/cards.js";
 import { createInitialState, normalizeState, loadLocalState, saveLocalState } from "../core/state.js";
-import { money, esc, monthKey, monthLabel, incomeForMonth, isPaidThisMonth, totals } from "../core/calculations.js";
+import { money, esc } from "../core/calculations.js";
 import { accountIcon } from "../core/accounts.js";
 import { addIncomeEntry, removeIncomeEntry } from "../core/income.js";
 import { addCommitment, toggleCommitmentPaid, removeCommitment } from "../core/commitments.js";
 import { addExpense, toggleExpensePaid, removeExpense } from "../core/expenses.js";
 import { setSavingGoal } from "../core/savings.js";
-import { reportData, closeCurrentMonth, pctChange } from "../core/reports.js";
+import { closeCurrentMonth } from "../core/reports.js";
 
 let state=createInitialState(),session=null;
 
