@@ -1,13 +1,14 @@
 import { $ } from "./dom.js";
 
-export function createProfileUI({state,session,render,cloudSave,tab}){
+export function createProfileUI({getState,getSession,render,cloudSave,tab}){
+  const stateRef=()=>getState();
   function renderProfile(){
-    const p=state.profile||{};
+    const p=stateRef().profile||{};
     $("pName").value=p.name||"";
     $("pPhone").value=p.phone||"";
     $("pCity").value=p.city||"";
     $("pNote").value=p.note||"";
-    $("profileEmail").textContent=session?.user?.email||"";
+    $("profileEmail").textContent=getSession()?.user?.email||"";
     const img=$("profileImg"),top=$("topAvatar");
     if(p.photo){
       img.src=p.photo;top.src=p.photo;
@@ -21,7 +22,7 @@ export function createProfileUI({state,session,render,cloudSave,tab}){
 
   $("profileQuick").onclick=()=>tab("profile");
   $("saveProfile").onclick=async()=>{
-    state.profile={...state.profile,name:$("pName").value.trim(),phone:$("pPhone").value.trim(),city:$("pCity").value.trim(),note:$("pNote").value.trim()};
+    stateRef().profile={...stateRef().profile,name:$("pName").value.trim(),phone:$("pPhone").value.trim(),city:$("pCity").value.trim(),note:$("pNote").value.trim()};
     render();
     await cloudSave();
     alert("Perfil guardado correctamente.");
@@ -35,7 +36,7 @@ export function createProfileUI({state,session,render,cloudSave,tab}){
         const c=document.createElement("canvas"),max=420,scale=Math.min(1,max/Math.max(im.width,im.height));
         c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);
         c.getContext("2d").drawImage(im,0,0,c.width,c.height);
-        state.profile.photo=c.toDataURL("image/jpeg",.78);
+        stateRef().profile.photo=c.toDataURL("image/jpeg",.78);
         render();cloudSave();
       };
       im.src=r.result;
