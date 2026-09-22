@@ -15,3 +15,12 @@ Se agrega una capa UI independiente para reducir el acoplamiento del archivo pri
 - `src/web/app.js`: conserva la orquestación de la aplicación, pero consume las utilidades UI como módulos.
 
 La etapa V12.4 no modifica el esquema de Supabase ni la rama `main`.
+
+
+## V12.6 — UI desacoplada
+Se extrajeron tres responsabilidades del orquestador web:
+- `src/ui/accounts.js`: cuentas, edición, eliminación, vista previa y detección visual de tarjetas.
+- `src/ui/profile.js`: renderizado, guardado y foto del perfil.
+- `src/ui/auth.js`: login, registro, recuperación, restablecimiento de contraseña y Enter para iniciar sesión.
+
+`src/web/app.js` conserva la coordinación general, Supabase, estado de sesión y eventos de negocio. La UI extraída recibe funciones de acceso al estado actual para evitar referencias obsoletas cuando el estado se normaliza después de cargar datos.
