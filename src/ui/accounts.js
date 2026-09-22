@@ -61,7 +61,6 @@ export function createAccountsUI({getState,render,cloudSave}){
     document.querySelectorAll("[data-dela]").forEach(b=>b.onclick=async()=>{stateRef().accounts.splice(+b.dataset.dela,1);render();await cloudSave()});
   }
 
-  $("profileQuick").onclick=()=>window.__mesadaTab?.("profile");
   $("addAccountBtn").onclick=()=>openAccountForm();
   $("cancelAccount").onclick=()=>{$("accountForm").classList.add("hidden");resetAccountForm()};
   $("aType").onchange=()=>{if($("aType").value==="paypal"){$("aInstitution").value="PayPal";$("aCardType").value="auto"}updateCardPreview()};
