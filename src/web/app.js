@@ -1,12 +1,15 @@
 import { supabase, APP_URL, RECOVERY_REDIRECT } from "../services/supabase.js";
 import { $, showMsg } from "../ui/dom.js";
+import { createAccountsUI } from "../ui/accounts.js";
+import { createProfileUI } from "../ui/profile.js";
+import { createAuthUI } from "../ui/auth.js";
 import { tab, authPanel } from "../ui/navigation.js";
 import { renderDashboard } from "../ui/renderDashboard.js";
 import { renderCommitments, renderExpenses, renderIncomeUI, renderReports } from "../ui/renderBudget.js";
 import { createInitialState, normalizeState, loadLocalState, saveLocalState } from "../core/state.js";
-import { addIncomeEntry, removeIncomeEntry } from "../core/income.js";
-import { addCommitment, toggleCommitmentPaid, removeCommitment } from "../core/commitments.js";
-import { addExpense, toggleExpensePaid, removeExpense } from "../core/expenses.js";
+import { addIncomeEntry } from "../core/income.js";
+import { addCommitment } from "../core/commitments.js";
+import { addExpense } from "../core/expenses.js";
 import { setSavingGoal } from "../core/savings.js";
 import { closeCurrentMonth } from "../core/reports.js";
 
