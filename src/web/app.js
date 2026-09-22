@@ -1,5 +1,6 @@
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { supabase, APP_URL, DEFAULT, RECOVERY_REDIRECT } from "../services/supabase.js";
+import { CARD_CATALOG, detectCard, cardPath } from "../services/cards.js";
 function updateCardPreview(){const c=detectCard($("aInstitution").value,$("aName").value,$("aCardType").value),box=$("cardPreview");if(!c){box.classList.add("hidden");return}$("cardPreviewImg").src=cardPath(c);$("cardPreviewTitle").textContent=c.label;$("cardPreviewText").textContent="Imagen asignada automáticamente según el banco y tipo.";box.classList.remove("hidden")}
 
 function renderProfile(){const p=state.profile||{}; $("pName").value=p.name||""; $("pPhone").value=p.phone||""; $("pCity").value=p.city||""; $("pNote").value=p.note||""; $("profileEmail").textContent=session?.user?.email||""; const img=$("profileImg"),top=$("topAvatar"); if(p.photo){img.src=p.photo;top.src=p.photo;img.classList.remove("hidden");top.classList.remove("hidden");}else{img.removeAttribute("src");top.removeAttribute("src");img.classList.remove("hidden");top.classList.remove("hidden");} $("topName").textContent=p.name||"Mi perfil";}
