@@ -1,6 +1,17 @@
-
 import { supabase, APP_URL, DEFAULT, RECOVERY_REDIRECT } from "../services/supabase.js";
 import { CARD_CATALOG, detectCard, cardPath } from "../services/cards.js";
+import { createInitialState, normalizeState, loadLocalState, saveLocalState } from "../core/state.js";
+import { money, esc, monthKey, monthLabel, incomeForMonth, currentIncome, isPaidThisMonth, totals } from "../core/calculations.js";
+import { accountIcon } from "../core/accounts.js";
+
+let state=createInitialState(),session=null;
+const $=id=>document.getElementById(id);
+function key(){return "mi_presupuesto_v6_"+(session?.user?.id||"anon")}
+function localSave(){saveLocalState(session?.user?.id,state)}
+function localLoad(){const x=loadLocalState(session?.user?.id);if(x)state=x}
+async function cloudLoad(){const {data,error}=await supabase.from("budget_data").select("data").eq("user_id",session.user.id).maybeSingle();if(error){console.error(error);return}if(data?.data)state=normalizeState(data.data);else await cloudSave();localSave()}
+async function cloudSave(){const {error}=await supabase.from("budget_data").upsert({user_id:session.user.id,data:state,updated_at:new Date().toISOString()});if(error)console.error("Cloud save",error);localSave()}
+
 function updateCardPreview(){const c=detectCard($("aInstitution").value,$("aName").value,$("aCardType").value),box=$("cardPreview");if(!c){box.classList.add("hidden");return}$("cardPreviewImg").src=cardPath(c);$("cardPreviewTitle").textContent=c.label;$("cardPreviewText").textContent="Imagen asignada automáticamente según el banco y tipo.";box.classList.remove("hidden")}
 
 function renderProfile(){const p=state.profile||{}; $("pName").value=p.name||""; $("pPhone").value=p.phone||""; $("pCity").value=p.city||""; $("pNote").value=p.note||""; $("profileEmail").textContent=session?.user?.email||""; const img=$("profileImg"),top=$("topAvatar"); if(p.photo){img.src=p.photo;top.src=p.photo;img.classList.remove("hidden");top.classList.remove("hidden");}else{img.removeAttribute("src");top.removeAttribute("src");img.classList.remove("hidden");top.classList.remove("hidden");} $("topName").textContent=p.name||"Mi perfil";}
