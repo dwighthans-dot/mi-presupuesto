@@ -46,3 +46,7 @@ Se agregó un build web reproducible en `scripts/build-web.mjs`. La aplicación 
 
 ## V12.13 — Preparación Android
 Se agregó `@capacitor/android` como dependencia y se dejó preparado el comando de sincronización Android. La carpeta `android/` solamente documenta el punto de generación; no se simula una plataforma nativa. La plataforma real será creada mediante `npx cap add android` en un entorno con Node.js y Android Studio/SDK. iOS queda para una etapa posterior.
+
+## V12.14 — Identidad y preparación Android
+Se fijó la versión del proyecto en 12.14.0 y se agregaron comandos explícitos para preparar, sincronizar y abrir la plataforma Android de Capacitor. La identidad queda definida como `Mesada` con `com.mesada.app`. Los recursos nativos definitivos de launcher, iconos adaptativos y splash quedan pendientes de la generación real de `android/`; no se simula una plataforma nativa. `main`, Supabase, la interfaz web y las reglas financieras permanecen sin cambios.
+
