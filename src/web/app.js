@@ -9,11 +9,6 @@ import { renderDashboard } from "../ui/renderDashboard.js";
 import { renderCommitments, renderExpenses, renderIncomeUI, renderReports } from "../ui/renderBudget.js";
 import { createInitialState, normalizeState, loadLocalState, saveLocalState } from "../core/state.js";
 
-
-
-
-
-
 let state=createInitialState(),session=null;
 
 function localSave(){saveLocalState(session?.user?.id,state)}
