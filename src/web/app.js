@@ -1,4 +1,5 @@
 import { supabase, APP_URL, RECOVERY_REDIRECT } from "../services/supabase.js";
+import { createBudgetRepository } from "../services/budgetRepository.js";
 import { $ } from "../ui/dom.js";
 import { createAccountsUI } from "../ui/accounts.js";
 import { createProfileUI } from "../ui/profile.js";
@@ -13,8 +14,9 @@ let state=createInitialState(),session=null;
 
 function localSave(){saveLocalState(session?.user?.id,state)}
 function localLoad(){const x=loadLocalState(session?.user?.id);if(x)state=x}
-async function cloudLoad(){const {data,error}=await supabase.from("budget_data").select("data").eq("user_id",session.user.id).maybeSingle();if(error){console.error(error);return}if(data?.data)state=normalizeState(data.data);else await cloudSave();localSave()}
-async function cloudSave(){const {error}=await supabase.from("budget_data").upsert({user_id:session.user.id,data:state,updated_at:new Date().toISOString()});if(error)console.error("Cloud save",error);localSave()}
+const repository=createBudgetRepository({getSession:()=>session,getState:()=>state,setState:s=>{state=s},localSave});
+const cloudLoad=()=>repository.load();
+const cloudSave=()=>repository.save();
 
 function render(){renderDashboard(state);renderCommitments(state,render,cloudSave);renderExpenses(state,render,cloudSave);accountsUI.renderAccounts();profileUI.renderProfile();renderIncomeUI(state,render,cloudSave);renderReports(state);}
 function isRecoveryFlow(){return location.search.includes("reset=1")||location.hash.includes("type=recovery")||location.hash.includes("access_token=")&&location.hash.includes("type=recovery")}
