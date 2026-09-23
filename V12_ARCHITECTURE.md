@@ -38,3 +38,7 @@ Se extrajo la gestión del ciclo de sesión hacia `src/services/session.js`. El 
 
 ## V12.10 — Revisión estructural
 Se revisaron las dependencias de la capa UI y se corrigió el import explícito de `monthLabel` en `src/ui/renderBudget.js`. La base queda preparada para comenzar la integración de Capacitor sin cambiar deliberadamente la interfaz ni las reglas financieras.
+
+
+## V12.12 — Salida web para Capacitor
+Se agregó un build web reproducible en `scripts/build-web.mjs`. La aplicación estática se copia a `dist/` conservando `src/` y `cards/`, y `capacitor.config.ts` utiliza `dist` como `webDir`. Se actualizó el caché del Service Worker a `mesada-v12.12`. Todavía no se agregan las plataformas nativas Android/iOS.
