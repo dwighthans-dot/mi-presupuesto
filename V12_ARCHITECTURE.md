@@ -28,3 +28,13 @@ Se extrajeron tres responsabilidades del orquestador web:
 
 ## V12.7 — Eventos desacoplados
 Se extrajo la conexión de eventos de la interfaz hacia `src/ui/events.js`. Este módulo concentra las acciones de usuario sobre compromisos, gastos, ahorro, ingresos, configuración, cierre mensual, navegación y cierre de sesión, recibiendo el estado y las operaciones necesarias desde el orquestador.
+
+
+## V12.8 — Persistencia desacoplada
+Se extrajo el acceso a `budget_data` hacia `src/services/budgetRepository.js`. El orquestador conserva el estado, mientras el repositorio gestiona carga/guardado en Supabase y respaldo local.
+
+## V12.9 — Sesión desacoplada
+Se extrajo la gestión del ciclo de sesión hacia `src/services/session.js`. El módulo concentra la escucha de cambios de autenticación, recuperación y arranque de sesión.
+
+## V12.10 — Revisión estructural
+Se revisaron las dependencias de la capa UI y se corrigió el import explícito de `monthLabel` en `src/ui/renderBudget.js`. La base queda preparada para comenzar la integración de Capacitor sin cambiar deliberadamente la interfaz ni las reglas financieras.
