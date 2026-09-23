@@ -24,3 +24,7 @@ Se extrajeron tres responsabilidades del orquestador web:
 - `src/ui/auth.js`: login, registro, recuperación, restablecimiento de contraseña y Enter para iniciar sesión.
 
 `src/web/app.js` conserva la coordinación general, Supabase, estado de sesión y eventos de negocio. La UI extraída recibe funciones de acceso al estado actual para evitar referencias obsoletas cuando el estado se normaliza después de cargar datos.
+
+
+## V12.7 — Eventos desacoplados
+Se extrajo la conexión de eventos de la interfaz hacia `src/ui/events.js`. Este módulo concentra las acciones de usuario sobre compromisos, gastos, ahorro, ingresos, configuración, cierre mensual, navegación y cierre de sesión, recibiendo el estado y las operaciones necesarias desde el orquestador.
