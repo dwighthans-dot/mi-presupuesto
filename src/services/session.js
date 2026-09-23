@@ -1,4 +1,4 @@
-import { $, showMsg } from "../ui/dom.js";
+import { $ } from "../ui/dom.js";
 import { authPanel } from "../ui/navigation.js";
 
 export function createSessionManager({supabase,isRecoveryFlow,onSession,refresh}){
