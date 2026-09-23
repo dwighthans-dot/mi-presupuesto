@@ -1,16 +1,17 @@
 import { supabase, APP_URL, RECOVERY_REDIRECT } from "../services/supabase.js";
-import { $, showMsg } from "../ui/dom.js";
+import { $ } from "../ui/dom.js";
 import { createAccountsUI } from "../ui/accounts.js";
 import { createProfileUI } from "../ui/profile.js";
 import { createAuthUI } from "../ui/auth.js";
+import { bindAppEvents } from "../ui/events.js";
 import { tab, authPanel } from "../ui/navigation.js";
 import { renderDashboard } from "../ui/renderDashboard.js";
 import { renderCommitments, renderExpenses, renderIncomeUI, renderReports } from "../ui/renderBudget.js";
 import { createInitialState, normalizeState, loadLocalState, saveLocalState } from "../core/state.js";
-import { addIncomeEntry } from "../core/income.js";
-import { addCommitment } from "../core/commitments.js";
-import { addExpense } from "../core/expenses.js";
-import { setSavingGoal } from "../core/savings.js";
+
+
+
+
 import { closeCurrentMonth } from "../core/reports.js";
 
 let state=createInitialState(),session=null;
@@ -23,12 +24,8 @@ async function cloudSave(){const {error}=await supabase.from("budget_data").upse
 function render(){renderDashboard(state);renderCommitments(state,render,cloudSave);renderExpenses(state,render,cloudSave);accountsUI.renderAccounts();profileUI.renderProfile();renderIncomeUI(state,render,cloudSave);renderReports(state);}
 function isRecoveryFlow(){return location.search.includes("reset=1")||location.hash.includes("type=recovery")||location.hash.includes("access_token=")&&location.hash.includes("type=recovery")}
 async function refresh(s){session=s;const recovery=isRecoveryFlow();if(s && !recovery){localLoad();await cloudLoad();$("authView").classList.add("hidden");$("appView").classList.remove("hidden");$("nav").classList.remove("hidden");$("appHeader").classList.remove("hidden");render();tab("dashboard")}else{$("authView").classList.remove("hidden");$("appView").classList.add("hidden");$("nav").classList.add("hidden");$("appHeader").classList.add("hidden");authPanel(recovery?"resetPanel":"welcomePanel")}}
-$("logoutBtn").onclick=async()=>{await supabase.auth.signOut();location.reload()};
-const accountsUI=createAccountsUI({getState:()=>state,render,cloudSave});
-const profileUI=createProfileUI({getState:()=>state,getSession:()=>session,render,cloudSave,tab});
 createAuthUI({supabase,APP_URL,RECOVERY_REDIRECT,authPanel,refresh,isRecoveryFlow,setSession:s=>{session=s}});
-$("addCommit").onclick=async()=>{const n=$("cName").value.trim(),a=Number($("cAmount").value);if(!n||a<=0)return;addCommitment(state,n,a);$("cName").value="";$("cAmount").value="";render();await cloudSave()};$("addExpense").onclick=async()=>{const n=$("eName").value.trim(),a=Number($("eAmount").value);if(!n||a<=0)return;addExpense(state,n,a);$("eName").value="";$("eAmount").value="";render();await cloudSave()};$("saveGoal").onclick=async()=>{setSavingGoal(state,$("savingGoal").value);render();await cloudSave()};document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=async()=>{state.incomeMode=b.dataset.mode;render();await cloudSave()});$("addIncomeEntry").onclick=async()=>{const amount=Number($("incomeAmount").value),date=$("incomeDate").value||new Date().toISOString().slice(0,10),concept=$("incomeConcept").value.trim()||"Ingreso";if(amount<=0)return;addIncomeEntry(state,{amount,date,concept,mode:state.incomeMode});$("incomeAmount").value="";$("incomeConcept").value="";render();await cloudSave()};$("saveSettings").onclick=async()=>{state.income=Math.max(0,Number($("incomeInput").value)||0);setSavingGoal(state,$("savingGoalInput").value);render();showMsg("settingsMsg","Cambios guardados correctamente.");await cloudSave()};$("closeMonth").onclick=async()=>{closeCurrentMonth(state);render();showMsg("settingsMsg","Cierre del mes guardado en Reportes.");await cloudSave()};$("reportMonth").onchange=()=>renderReports();
-document.querySelectorAll("nav button,[data-tab]").forEach(b=>b.onclick=()=>tab(b.dataset.tab));
+bindAppEvents({getState:()=>state,render,cloudSave,renderReports:()=>renderReports(state),supabase,onLogout:()=>location.reload()});
 supabase.auth.onAuthStateChange((event,s)=>{if(event==="PASSWORD_RECOVERY"){session=s;authPanel("resetPanel");$("appHeader").classList.add("hidden");$("nav").classList.add("hidden");$("appView").classList.add("hidden");$("authView").classList.remove("hidden")}setTimeout(()=>refresh(s),0)});
 const {data:{session:s0}}=await supabase.auth.getSession();
 if(isRecoveryFlow()){$('appHeader').classList.add('hidden');$('nav').classList.add('hidden');$('appView').classList.add('hidden');$('authView').classList.remove('hidden');authPanel('resetPanel')}else{if(s0)await supabase.auth.signOut({scope:'local'});session=null;await refresh(null)}
