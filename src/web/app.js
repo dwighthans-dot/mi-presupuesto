@@ -9,7 +9,7 @@ import { bindAppEvents } from "../ui/events.js";
 import { tab, authPanel } from "../ui/navigation.js";
 import { renderDashboard } from "../ui/renderDashboard.js";
 import { renderCommitments, renderExpenses, renderIncomeUI, renderReports } from "../ui/renderBudget.js";
-import { createInitialState, normalizeState, loadLocalState, saveLocalState } from "../core/state.js";
+import { createInitialState, loadLocalState, saveLocalState } from "../core/state.js";
 
 let state=createInitialState(),session=null;
 
