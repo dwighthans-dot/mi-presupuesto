@@ -42,3 +42,7 @@ Se revisaron las dependencias de la capa UI y se corrigió el import explícito 
 
 ## V12.12 — Salida web para Capacitor
 Se agregó un build web reproducible en `scripts/build-web.mjs`. La aplicación estática se copia a `dist/` conservando `src/` y `cards/`, y `capacitor.config.ts` utiliza `dist` como `webDir`. Se actualizó el caché del Service Worker a `mesada-v12.12`. Todavía no se agregan las plataformas nativas Android/iOS.
+
+
+## V12.13 — Preparación Android
+Se agregó `@capacitor/android` como dependencia y se dejó preparado el comando de sincronización Android. La carpeta `android/` solamente documenta el punto de generación; no se simula una plataforma nativa. La plataforma real será creada mediante `npx cap add android` en un entorno con Node.js y Android Studio/SDK. iOS queda para una etapa posterior.
