@@ -1,5 +1,6 @@
 import { supabase, APP_URL, RECOVERY_REDIRECT } from "../services/supabase.js";
 import { createBudgetRepository } from "../services/budgetRepository.js";
+import { createSessionManager } from "../services/session.js";
 import { $ } from "../ui/dom.js";
 import { createAccountsUI } from "../ui/accounts.js";
 import { createProfileUI } from "../ui/profile.js";
@@ -25,6 +26,5 @@ const accountsUI=createAccountsUI({getState:()=>state,render,cloudSave});
 const profileUI=createProfileUI({getState:()=>state,getSession:()=>session,render,cloudSave,tab});
 createAuthUI({supabase,APP_URL,RECOVERY_REDIRECT,authPanel,refresh,isRecoveryFlow,setSession:s=>{session=s}});
 bindAppEvents({getState:()=>state,render,cloudSave,renderReports:()=>renderReports(state),supabase,onLogout:()=>location.reload()});
-supabase.auth.onAuthStateChange((event,s)=>{if(event==="PASSWORD_RECOVERY"){session=s;authPanel("resetPanel");$("appHeader").classList.add("hidden");$("nav").classList.add("hidden");$("appView").classList.add("hidden");$("authView").classList.remove("hidden")}setTimeout(()=>refresh(s),0)});
-const {data:{session:s0}}=await supabase.auth.getSession();
-if(isRecoveryFlow()){$('appHeader').classList.add('hidden');$('nav').classList.add('hidden');$('appView').classList.add('hidden');$('authView').classList.remove('hidden');authPanel('resetPanel')}else{if(s0)await supabase.auth.signOut({scope:'local'});session=null;await refresh(null)}
+const sessionManager=createSessionManager({supabase,isRecoveryFlow,onSession:s=>{session=s},refresh});
+await sessionManager.start();
