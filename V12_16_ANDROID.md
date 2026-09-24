@@ -14,7 +14,7 @@ Esta versión añade al proceso reproducible de GitHub Actions:
 - fondo nativo oscuro coherente con la identidad visual;
 - sincronización final de Capacitor.
 
-Capacitor documenta que una aplicación web existente puede incorporar las plataformas nativas y que Android se genera con `npx cap add android`. citeturn0search1turn0search0
+Capacitor documenta que una aplicación web existente puede incorporar las plataformas nativas y que Android se genera con `npx cap add android`.
 
 ## Flujo
 
@@ -30,7 +30,7 @@ El workflow generará y guardará la carpeta `android/` en `mesada-v12`.
 
 ## Recursos
 
-V12.16 utiliza `@capacitor/assets` para generar los recursos nativos desde el logo de Mesada. La documentación del proyecto indica que esta herramienta genera iconos y splash para Android y que puede trabajar desde un único logo en modo sencillo. citeturn2search1turn2search2
+V12.16 utiliza `@capacitor/assets` para generar los recursos nativos desde el logo de Mesada. La documentación del proyecto indica que esta herramienta genera iconos y splash para Android y que puede trabajar desde un único logo en modo sencillo.
 
 ## Seguridad del proyecto
 
