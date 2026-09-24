@@ -1,4 +1,4 @@
-name: V12.16 - Preparar Android nativo
+name: V12.17 - Compilar APK Android
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  prepare-android:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +16,12 @@ jobs:
         with:
           ref: mesada-v12
           fetch-depth: 0
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -29,42 +35,34 @@ jobs:
       - name: Generar paquete web
         run: npm run build
 
-      - name: Generar plataforma Android
-        run: npx cap add android
-
-      - name: Preparar identidad y recursos de Mesada
+      - name: Generar plataforma Android si aún no existe
         run: |
-          mkdir -p assets
-          cp logo.png assets/logo.png
-          npx @capacitor/assets generate --android --iconBackgroundColor '#071B2C' --iconBackgroundColorDark '#071B2C' --splashBackgroundColor '#071B2C' --splashBackgroundColorDark '#071B2C'
-
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path("android/app/build.gradle")
-          s=p.read_text()
-          s=s.replace('versionCode 1', 'versionCode 121600')
-          s=s.replace('versionName "1.0"', 'versionName "12.16.0"')
-          p.write_text(s)
-          PY
+          if [ ! -f android/settings.gradle ]; then
+            npx cap add android
+          fi
 
       - name: Sincronizar Android
         run: npx cap sync android
 
-      - name: Verificar proyecto Android
-        run: |
-          test -f android/settings.gradle
-          test -f android/app/src/main/AndroidManifest.xml
-          test -d android/app/src/main/res
-          echo "Proyecto Android V12.16 preparado correctamente."
+      - name: Compilar APK Debug
+        working-directory: android
+        run: ./gradlew assembleDebug
 
-      - name: Guardar plataforma Android en la rama V12
+      - name: Publicar APK como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: mesada-v12.17-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: Guardar cambios nativos
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add android package-lock.json
           if git diff --cached --quiet; then
-            echo "No hay cambios para guardar."
+            echo "No hay cambios nativos para guardar."
           else
-            git commit -m "V12.16: generar Android nativo e identidad Mesada"
+            git commit -m "V12.17: compilar y preparar APK Android"
             git push origin mesada-v12
           fi
