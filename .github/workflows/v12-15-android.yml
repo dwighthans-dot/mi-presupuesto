@@ -1,4 +1,4 @@
-name: V12.15 - Generar Android
+name: V12.16 - Preparar Android nativo
 
 on:
   workflow_dispatch:
@@ -7,11 +7,11 @@ permissions:
   contents: write
 
 jobs:
-  generate-android:
+  prepare-android:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout V12
         uses: actions/checkout@v4
         with:
           ref: mesada-v12
@@ -32,6 +32,21 @@ jobs:
       - name: Generar plataforma Android
         run: npx cap add android
 
+      - name: Preparar identidad y recursos de Mesada
+        run: |
+          mkdir -p assets
+          cp logo.png assets/logo.png
+          npx @capacitor/assets generate --android --iconBackgroundColor '#071B2C' --iconBackgroundColorDark '#071B2C' --splashBackgroundColor '#071B2C' --splashBackgroundColorDark '#071B2C'
+
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("android/app/build.gradle")
+          s=p.read_text()
+          s=s.replace('versionCode 1', 'versionCode 121600')
+          s=s.replace('versionName "1.0"', 'versionName "12.16.0"')
+          p.write_text(s)
+          PY
+
       - name: Sincronizar Android
         run: npx cap sync android
 
@@ -39,7 +54,8 @@ jobs:
         run: |
           test -f android/settings.gradle
           test -f android/app/src/main/AndroidManifest.xml
-          echo "Proyecto Android generado correctamente."
+          test -d android/app/src/main/res
+          echo "Proyecto Android V12.16 preparado correctamente."
 
       - name: Guardar plataforma Android en la rama V12
         run: |
@@ -49,6 +65,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No hay cambios para guardar."
           else
-            git commit -m "V12.15: generar plataforma Android con Capacitor"
+            git commit -m "V12.16: generar Android nativo e identidad Mesada"
             git push origin mesada-v12
           fi
