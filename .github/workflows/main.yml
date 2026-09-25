@@ -35,11 +35,10 @@ jobs:
       - name: Generar paquete web
         run: npm run build
 
-      - name: Generar plataforma Android si aún no existe
+      - name: Generar plataforma Android
         run: |
-          if [ ! -f android/settings.gradle ]; then
-            npx cap add android
-          fi
+          rm -rf android
+          npx cap add android
 
       - name: Sincronizar Android
         run: npx cap sync android
@@ -63,6 +62,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No hay cambios nativos para guardar."
           else
-            git commit -m "V12.17: compilar y preparar APK Android"
+            git commit -m "V12.17: generar plataforma Android y preparar APK"
             git push origin mesada-v12
           fi
