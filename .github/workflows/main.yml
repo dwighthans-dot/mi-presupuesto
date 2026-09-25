@@ -1,0 +1,68 @@
+name: V12.17 - Compilar APK Android
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout rama V12
+        uses: actions/checkout@v4
+        with:
+          ref: mesada-v12
+          fetch-depth: 0
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Generar paquete web
+        run: npm run build
+
+      - name: Generar plataforma Android si aún no existe
+        run: |
+          if [ ! -f android/settings.gradle ]; then
+            npx cap add android
+          fi
+
+      - name: Sincronizar Android
+        run: npx cap sync android
+
+      - name: Compilar APK Debug
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Publicar APK como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: mesada-v12.17-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+      - name: Guardar cambios nativos en V12
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add android package-lock.json
+          if git diff --cached --quiet; then
+            echo "No hay cambios nativos para guardar."
+          else
+            git commit -m "V12.17: compilar y preparar APK Android"
+            git push origin mesada-v12
+          fi
