@@ -12,9 +12,19 @@ export function createAuthUI({supabase,APP_URL,RECOVERY_REDIRECT,authPanel,refre
     showMsg("authMsg","",false);$("authMsg").classList.add("hidden");
     const email=$("email").value.trim(),password=$("password").value;
     if(!email||!password)return showMsg("authMsg","Escribe tu correo y contraseña.",true);
-    const {data,error}=await supabase.auth.signInWithPassword({email,password});
-    if(error)showMsg("authMsg","No se pudo iniciar sesión. Revisa el correo y la contraseña.",true);
-    else await refresh(data.session);
+    const btn=$("loginBtn");
+    btn.disabled=true;btn.textContent="Iniciando sesión…";
+    try{
+      const {data,error}=await supabase.auth.signInWithPassword({email,password});
+      if(error)showMsg("authMsg","No se pudo iniciar sesión. Revisa el correo y la contraseña.",true);
+      else if(data.session)await refresh(data.session);
+      else showMsg("authMsg","No se recibió una sesión válida. Intenta nuevamente.",true);
+    }catch(error){
+      console.error("Login error",error);
+      showMsg("authMsg","No se pudo conectar con el servicio. Verifica tu internet e inténtalo de nuevo.",true);
+    }finally{
+      btn.disabled=false;btn.textContent="Iniciar sesión";
+    }
   };
 
   $("signupBtn").onclick=async()=>{
