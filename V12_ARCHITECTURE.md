@@ -50,3 +50,13 @@ Se agregó `@capacitor/android` como dependencia y se dejó preparado el comando
 ## V12.14 — Identidad y preparación Android
 Se fijó la versión del proyecto en 12.14.0 y se agregaron comandos explícitos para preparar, sincronizar y abrir la plataforma Android de Capacitor. La identidad queda definida como `Mesada` con `com.mesada.app`. Los recursos nativos definitivos de launcher, iconos adaptativos y splash quedan pendientes de la generación real de `android/`; no se simula una plataforma nativa. `main`, Supabase, la interfaz web y las reglas financieras permanecen sin cambios.
 
+
+
+## V12.15–V12.21 — Android real
+Se generó la plataforma Android real mediante GitHub Actions, se incorporó el build Debug y se corrigió la carga de Supabase para Android mediante bundle local con esbuild. V12.20 optimizó la interfaz para pantallas móviles y V12.21 generó los iconos y splash oficiales de Mesada para evitar el icono de Capacitor. La funcionalidad aprobada de V11 se mantiene como base.
+
+## V12.22 — Preparación iOS
+Se agregó `@capacitor/ios`, los comandos de sincronización iOS y la plataforma iOS real mediante GitHub Actions en macOS. El proyecto iOS usa Swift Package Manager y quedó guardado en la rama `mesada-v12`. La compilación final en Xcode, firma y distribución requieren una Mac.
+
+## V12.23 — Verificación multiplataforma
+Se agrega `scripts/verify-v12.mjs` y el comando `npm run verify` para comprobar que la base de Web, Android e iOS esté presente y que la identidad Capacitor de Mesada sea `com.mesada.app`. Esta etapa no modifica Supabase, no modifica la rama `main` y no cambia las reglas financieras.
