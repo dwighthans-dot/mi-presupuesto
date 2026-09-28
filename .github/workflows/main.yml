@@ -1,4 +1,4 @@
-name: V12.21 - Icono Mesada y compilación Android
+name: V12.22 - Preparar iOS de Mesada
 
 on:
   workflow_dispatch:
@@ -7,8 +7,8 @@ permissions:
   contents: write
 
 jobs:
-  build-android:
-    runs-on: ubuntu-latest
+  prepare-ios:
+    runs-on: macos-26
 
     steps:
       - name: Checkout rama V12
@@ -16,12 +16,6 @@ jobs:
         with:
           ref: mesada-v12
           fetch-depth: 0
-
-      - name: Configurar Java
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '21'
 
       - name: Configurar Node.js
         uses: actions/setup-node@v7
@@ -35,10 +29,10 @@ jobs:
       - name: Generar paquete web
         run: npm run build
 
-      - name: Generar plataforma Android
+      - name: Generar plataforma iOS con Swift Package Manager
         run: |
-          rm -rf android
-          npx cap add android
+          rm -rf ios
+          npx cap add ios --packagemanager SPM
 
       - name: Preparar icono oficial de Mesada
         run: |
@@ -48,30 +42,31 @@ jobs:
 
       - name: Generar iconos y splash de Mesada
         run: |
-          npx @capacitor/assets generate --android --iconBackgroundColor '#071B2C' --splashBackgroundColor '#071B2C'
+          npx @capacitor/assets generate --ios --iconBackgroundColor '#071B2C' --splashBackgroundColor '#071B2C'
 
-      - name: Sincronizar Android
-        run: npx cap sync android
+      - name: Sincronizar iOS
+        run: npx cap sync ios
 
-      - name: Compilar APK Debug
-        working-directory: android
-        run: ./gradlew assembleDebug
+      - name: Verificar compilación iOS
+        run: |
+          xcodebuild -version
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
 
-      - name: Publicar APK como artefacto
+      - name: Publicar proyecto iOS como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: mesada-v12.21-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: mesada-v12.22-ios-project
+          path: ios
           if-no-files-found: error
 
-      - name: Guardar cambios nativos en V12
+      - name: Guardar proyecto iOS en V12
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add android package-lock.json
+          git add ios assets package-lock.json
           if git diff --cached --quiet; then
-            echo "No hay cambios nativos para guardar."
+            echo "No hay cambios iOS para guardar."
           else
-            git commit -m "V12.20: optimizar interfaz móvil y compilar APK Android"
+            git commit -m "V12.22: preparar proyecto iOS de Mesada"
             git push origin mesada-v12
           fi
