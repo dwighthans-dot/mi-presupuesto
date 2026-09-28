@@ -1,4 +1,5 @@
-import { $, esc } from "./dom.js";
+import { $ } from "./dom.js";
+import { esc } from "../core/calculations.js";
 import { money, monthKey, monthLabel, isPaidThisMonth, incomeForMonth } from "../core/calculations.js";
 import { toggleCommitmentPaid, removeCommitment } from "../core/commitments.js";
 import { toggleExpensePaid, removeExpense } from "../core/expenses.js";
