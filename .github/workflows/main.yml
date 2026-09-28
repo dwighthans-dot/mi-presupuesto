@@ -1,4 +1,4 @@
-name: V12.20 - Optimizar y compilar APK Android
+name: V12.21 - Icono Mesada y compilación Android
 
 on:
   workflow_dispatch:
@@ -40,6 +40,16 @@ jobs:
           rm -rf android
           npx cap add android
 
+      - name: Preparar icono oficial de Mesada
+        run: |
+          rm -rf assets
+          mkdir -p assets
+          cp logo.png assets/logo.png
+
+      - name: Generar iconos y splash de Mesada
+        run: |
+          npx @capacitor/assets generate --android --iconBackgroundColor '#071B2C' --splashBackgroundColor '#071B2C'
+
       - name: Sincronizar Android
         run: npx cap sync android
 
@@ -50,7 +60,7 @@ jobs:
       - name: Publicar APK como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: mesada-v12.19-debug-apk
+          name: mesada-v12.21-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
