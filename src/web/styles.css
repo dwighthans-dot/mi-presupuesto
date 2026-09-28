@@ -30,3 +30,36 @@ nav button:active .navIcon{transform:scale(.94)}
 nav button:hover .navIcon{transform:translateY(-1px) scale(1.04)}
 nav button.active .navLabel{font-weight:800;transform:translateY(-1px)}
 @media(max-width:520px){nav{padding:6px;bottom:9px;border-radius:21px}nav button{min-width:76px;flex:0 0 76px;height:59px;padding:5px 6px}.navIcon{width:35px;height:35px}.navIcon svg{width:21px;height:21px}.navLabel{font-size:10px}}
+
+/* V12.20 — optimización móvil Android / pantallas altas */
+html{min-height:100%;height:100%;overflow-x:hidden}
+body{min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-x:none}
+.wrap{padding-bottom:calc(124px + env(safe-area-inset-bottom, 0px))}
+.top{padding-top:max(14px, env(safe-area-inset-top, 0px));padding-bottom:24px}
+.hero{margin-top:14px;padding:18px;border-radius:22px}
+.cards{margin-top:14px}
+.tab-section{will-change:transform,opacity;animation:tabIn20 .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes tabIn20{from{opacity:0;transform:translate3d(0,12px,0)}60%{opacity:.92}to{opacity:1;transform:translate3d(0,0,0)}}
+nav{bottom:calc(10px + env(safe-area-inset-bottom, 0px));justify-content:flex-start;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain}
+nav::-webkit-scrollbar{display:none}
+nav button{min-width:70px;flex:0 0 70px}
+@media(max-width:520px){
+  .wrap{padding-left:10px;padding-right:10px;padding-bottom:calc(126px + env(safe-area-inset-bottom, 0px))}
+  .top{padding-left:14px;padding-right:14px;padding-bottom:20px;border-radius:0 0 28px 28px}
+  .brandline{gap:9px}.brandlogo{width:40px;height:40px}.brand{font-size:20px}.sub{font-size:11px}
+  .avatarBtn{padding:6px 8px;border-radius:16px}.avatar{width:44px;height:44px}.avatarBtn span{font-size:14px;line-height:1.05;text-align:right;max-width:145px}
+  .hero{margin-top:12px;padding:15px 16px;border-radius:20px}.balance{font-size:27px}.daily{font-size:12px}
+  .mini{margin-top:12px}.pill{padding:8px 10px;font-size:11px}
+  .cards{gap:7px;margin:12px 0}.stat{padding:12px;border-radius:16px}.stat span{font-size:11px}.stat b{font-size:15px;margin-top:4px}
+  .card{padding:16px;border-radius:20px}.item{padding:11px;border-radius:15px}
+  nav{width:calc(100% - 14px);padding:5px;border-radius:19px;bottom:calc(8px + env(safe-area-inset-bottom, 0px))}
+  nav button{min-width:68px;flex-basis:68px;height:57px;padding:4px 5px}
+  .navIcon{width:32px;height:32px;border-radius:10px}.navIcon svg{width:19px;height:19px}.navLabel{font-size:9px}
+}
+@media(max-height:700px) and (max-width:520px){
+  .top{padding-bottom:15px}.hero{padding:13px}.cards{margin:9px 0}.card{padding:14px}
+  nav button{height:53px}.navIcon{width:30px;height:30px}.navLabel{font-size:8.5px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tab-section,.navIcon,.navLabel,nav button,.btn{animation:none!important;transition:none!important}
+}
