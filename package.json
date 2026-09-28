@@ -1,6 +1,6 @@
 {
   "name": "mesada",
-  "version": "12.20.0",
+  "version": "12.22.0",
   "private": true,
   "description": "Mesada — Tu mes, bien organizado",
   "scripts": {
@@ -10,11 +10,16 @@
     "android:setup": "npm run build && npx cap add android",
     "android:sync": "npm run build && npx cap sync android",
     "android:open": "npx cap open android",
-    "android:build": "npm run build && npx cap sync android && cd android && ./gradlew assembleDebug"
+    "android:build": "npm run build && npx cap sync android && cd android && ./gradlew assembleDebug",
+    "ios": "npm run build && npx cap sync ios",
+    "ios:setup": "npm run build && npx cap add ios --packagemanager SPM",
+    "ios:sync": "npm run build && npx cap sync ios",
+    "ios:open": "npx cap open ios"
   },
   "dependencies": {
     "@capacitor/core": "^8.0.0",
     "@capacitor/android": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
     "@supabase/supabase-js": "^2.57.4"
   },
   "devDependencies": {
