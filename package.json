@@ -1,6 +1,6 @@
 {
   "name": "mesada",
-  "version": "12.22.0",
+  "version": "12.23.0",
   "private": true,
   "description": "Mesada — Tu mes, bien organizado",
   "scripts": {
@@ -14,7 +14,8 @@
     "ios": "npm run build && npx cap sync ios",
     "ios:setup": "npm run build && npx cap add ios --packagemanager SPM",
     "ios:sync": "npm run build && npx cap sync ios",
-    "ios:open": "npx cap open ios"
+    "ios:open": "npx cap open ios",
+    "verify": "node scripts/verify-v12.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.0.0",
