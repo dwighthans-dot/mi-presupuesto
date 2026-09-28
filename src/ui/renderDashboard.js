@@ -1,4 +1,5 @@
-import { $, esc } from "./dom.js";
+import { $ } from "./dom.js";
+import { esc } from "../core/calculations.js";
 import { money, monthKey, monthLabel, totals } from "../core/calculations.js";
 export function renderDashboard(state){
   const t=totals(state);
