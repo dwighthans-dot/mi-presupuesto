@@ -11,7 +11,10 @@ export function tab(name){
       el.classList.add("tab-section");
     }
   });
-  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  const buttons=[...document.querySelectorAll("nav button")];
+  buttons.forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  const active=buttons.find(b=>b.dataset.tab===name);
+  if(active) active.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
