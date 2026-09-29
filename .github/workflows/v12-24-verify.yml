@@ -1,0 +1,34 @@
+name: V12.24 - Verificación multiplataforma
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout V12
+        uses: actions/checkout@v4
+        with:
+          ref: mesada-v12
+
+      - name: Configurar Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Verificar estructura y configuración
+        run: npm run verify
+
+      - name: Generar build web
+        run: npm run build
+
+      - name: Confirmar bundle generado
+        run: test -f dist/app.bundle.js
