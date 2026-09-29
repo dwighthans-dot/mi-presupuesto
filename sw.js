@@ -1,4 +1,4 @@
-const CACHE="mesada-v12.12";
+const CACHE="mesada-v12.24";
 const ASSETS=[
   "./",
   "./index.html",
