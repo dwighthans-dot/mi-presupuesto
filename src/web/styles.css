@@ -63,3 +63,51 @@ nav button{min-width:70px;flex:0 0 70px}
 @media(prefers-reduced-motion:reduce){
   .tab-section,.navIcon,.navLabel,nav button,.btn{animation:none!important;transition:none!important}
 }
+
+
+/* V12.24 — iOS/Android edge, performance y transiciones */
+html{
+  overscroll-behavior-y:none;
+  overscroll-behavior-x:none;
+  scroll-behavior:smooth;
+}
+body{
+  overscroll-behavior-y:none;
+  overscroll-behavior-x:none;
+  -webkit-overflow-scrolling:touch;
+}
+body:before{animation:none!important}
+.top{
+  padding-top:calc(14px + env(safe-area-inset-top,0px));
+}
+.wrap{
+  padding-top:max(8px,env(safe-area-inset-top,0px));
+  padding-bottom:calc(132px + env(safe-area-inset-bottom,0px));
+}
+.tab-section{
+  will-change:auto;
+  animation:tabIn24 .46s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes tabIn24{
+  from{opacity:0;transform:translate3d(0,14px,0) scale(.995)}
+  55%{opacity:.92}
+  to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+.liquid:after{animation:none!important}
+nav{
+  bottom:max(8px,env(safe-area-inset-bottom,8px));
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+@media(max-width:520px){
+  .wrap{
+    padding-top:max(6px,env(safe-area-inset-top,0px));
+    padding-bottom:calc(138px + env(safe-area-inset-bottom,0px));
+  }
+  .top{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+  nav{bottom:max(8px,env(safe-area-inset-bottom,8px))}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .tab-section{animation:none!important}
+}
