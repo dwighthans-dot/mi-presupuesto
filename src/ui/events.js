@@ -38,7 +38,13 @@ export function bindAppEvents({getState,render,cloudSave,renderReports,supabase,
 
   document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=async()=>{
     state().incomeMode=b.dataset.mode;
-    render();await cloudSave();
+    render();
+    showMsg("settingsMsg",state().incomeMode==="biweekly"
+      ?"Modo quincenal guardado."
+      :state().incomeMode==="daily"
+        ?"Modo diario guardado."
+        :"Modo mensual guardado.");
+    await cloudSave();
   });
 
   $("addIncomeEntry").onclick=async()=>{
