@@ -3,6 +3,7 @@ import { normalizeState } from "../core/state.js";
 
 export function createBudgetRepository({getSession,getState,setState,localSave}){
   const sessionRef=()=>getSession();
+  let saveQueue=Promise.resolve();
 
   async function load(){
     const session=sessionRef();
@@ -23,22 +24,35 @@ export function createBudgetRepository({getSession,getState,setState,localSave})
   }
 
   async function save(){
-    const session=sessionRef();
-    if(!session?.user?.id)return false;
-    const {error}=await supabase
-      .from("budget_data")
-      .upsert({
-        user_id:session.user.id,
-        data:getState(),
-        updated_at:new Date().toISOString()
-      });
-    if(error){
-      console.error("Cloud save",error);
+    saveQueue=saveQueue.then(async()=>{
+      const session=sessionRef();
+      if(!session?.user?.id)return false;
+
+      // Guardamos localmente antes de la petición para no perder cambios
+      // si el dispositivo entra en modo offline o la petición falla.
+      localSave();
+
+      const {error}=await supabase
+        .from("budget_data")
+        .upsert({
+          user_id:session.user.id,
+          data:getState(),
+          updated_at:new Date().toISOString()
+        });
+
+      if(error){
+        console.error("Cloud save",error);
+        return false;
+      }
+      localSave();
+      return true;
+    }).catch(error=>{
+      console.error("Cloud save queue",error);
       localSave();
       return false;
-    }
-    localSave();
-    return true;
+    });
+
+    return saveQueue;
   }
 
   return {load,save};
