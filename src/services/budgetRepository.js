@@ -17,9 +17,15 @@ export function createBudgetRepository({getSession,getState,setState,localSave})
       console.error(error);
       return false;
     }
-    if(data?.data)setState(normalizeState(data.data));
-    else await save();
-    localSave();
+    if(data?.data){
+      const before=data.data.activeMonth||"";
+      const normalized=normalizeState(data.data);
+      setState(normalized);
+      localSave();
+      if(before!==normalized.activeMonth)await save();
+    }else{
+      await save();
+    }
     return true;
   }
 
@@ -28,8 +34,6 @@ export function createBudgetRepository({getSession,getState,setState,localSave})
       const session=sessionRef();
       if(!session?.user?.id)return false;
 
-      // Guardamos localmente antes de la petición para no perder cambios
-      // si el dispositivo entra en modo offline o la petición falla.
       localSave();
 
       const {error}=await supabase
